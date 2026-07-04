@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AstroKot · АстроКошак</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at 30% 20%, #0b0f2a, #030514);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            padding: 1.5rem;
+            color: #fff;
+        }
+
+        .card {
+            max-width: 560px;
+            width: 100%;
+            background: rgba(18, 25, 55, 0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(120, 180, 255, 0.15);
+            border-radius: 48px;
+            padding: 2.5rem 2rem 2.2rem;
+            box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+            text-align: center;
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 1.2rem;
+            background: linear-gradient(135deg, #6c8cff, #a855f7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: #fff;
+            box-shadow: 0 8px 30px rgba(108, 140, 255, 0.35);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            user-select: none;
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .name {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #f0f9ff, #b6d4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .badge {
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            padding: 0.25rem 1rem;
+            border-radius: 40px;
+            color: #cdb4ff;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #9ab3ff;
+            margin: 0.5rem 0 1.4rem 0;
+            letter-spacing: 0.3px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+            padding-bottom: 1rem;
+        }
+
+        .bio {
+            background: rgba(0, 10, 30, 0.4);
+            border-left: 4px solid #6c8cff;
+            padding: 1.2rem 1.4rem;
+            border-radius: 20px;
+            margin: 1.2rem 0 1.5rem 0;
+            text-align: left;
+            font-size: 0.98rem;
+            line-height: 1.7;
+            color: #d3e2ff;
+            backdrop-filter: blur(4px);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+        }
+
+        .bio i {
+            color: #a855f7;
+            margin-right: 6px;
+        }
+
+        .bio strong {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .bio .tag {
+            display: inline-block;
+            background: rgba(108, 140, 255, 0.12);
+            border: 1px solid rgba(108, 140, 255, 0.15);
+            padding: 0.05rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #9ab3ff;
+            margin: 2px 0;
+        }
+
+        .old-nick {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.08);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            padding: 0.1rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            color: #ffd966;
+            margin-top: 6px;
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 1.2rem;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 0.9rem;
+            border-radius: 60px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            color: #d3e2ff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: 0.2s ease;
+            backdrop-filter: blur(4px);
+            cursor: pointer;
+        }
+
+        .btn i {
+            font-size: 1.2rem;
+            width: 24px;
+            color: #8ab4ff;
+        }
+
+        .btn:hover {
+            background: rgba(108, 140, 255, 0.13);
+            border-color: rgba(108, 140, 255, 0.25);
+            transform: scale(1.01);
+            color: #fff;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f7aff, #8b5cf6);
+            border: none;
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(79, 122, 255, 0.25);
+        }
+
+        .btn-primary i {
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #3d68e6, #7a4de0);
+            box-shadow: 0 8px 28px rgba(79, 122, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-like {
+            background: rgba(255, 80, 120, 0.08);
+            border: 1px solid rgba(255, 80, 120, 0.15);
+            color: #ff8aae;
+        }
+
+        .btn-like i {
+            color: #ff4d7a;
+            transition: 0.2s;
+        }
+
+        .btn-like:hover {
+            background: rgba(255, 80, 120, 0.15);
+            border-color: rgba(255, 80, 120, 0.3);
+        }
+
+        .btn-like .like-count {
+            margin-left: 4px;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.1rem 0.7rem;
+            border-radius: 30px;
+        }
+
+        .btn-like.liked i {
+            animation: pop 0.3s ease;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
+        }
+
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.2);
+            letter-spacing: 0.5px;
+        }
+
+        .footer i {
+            color: rgba(255, 100, 100, 0.3);
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 1.8rem 1.2rem; }
+            .name { font-size: 1.8rem; }
+            .avatar { width: 85px; height: 85px; font-size: 2.5rem; }
+            .badge { font-size: 0.55rem; padding: 0.2rem 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+
+        <div class="avatar">
+            🐱
+        </div>
+
+        <div>
+            <span class="name">AstroKot</span>
+            <span class="badge"><i class="fas fa-rocket" style="margin-right: 5px;"></i> НАЧИНАЮЩИЙ FLIPPLE ЧЕЛ</span>
+        </div>
+        <div class="subtitle">
+            <i class="fas fa-gamepad" style="margin-right: 6px;"></i> Flipple Arcade
+        </div>
+
+        <div class="bio">
+            <i class="fas fa-quote-left" style="opacity: 0.4; font-size: 0.9rem;"></i>
+            Привет, я <strong>AstroKot</strong>! 🚀<br />
+            На данный момент я начинаю свою деятельность на Flipple Arcade.<br />
+            Также кто меня помнит — на Omlet Arcade под ником <span class="old-nick"><i class="fas fa-star"></i> BGgemsTV</span><br /><br />
+            <i class="fas fa-code" style="color: #34d399;"></i> Обожаю программировать на <span class="tag">ESP32</span> и создавать всякое в <span class="tag">Майнкрафте</span> 🧱<br />
+            <i class="fas fa-bolt" style="color: #fbbf24;"></i> Изучаю платформу, ищу свой стиль и готовлю крутой контент.<br />
+            <i class="fas fa-users" style="color: #60a5fa;"></i> Буду рад новым знакомствам и совместным стримам!
+        </div>
+
+        <div class="links">
+            <button class="btn btn-like" id="likeBtn">
+                <i class="fas fa-heart"></i>
+                Лайкнуть
+                <span class="like-count" id="likeCount">0</span>
+            </button>
+
+            <a href="#" class="btn btn-primary" target="_blank">
+                <i class="fab fa-twitch"></i> Twitch (скоро)
+            </a>
+            <a href="#" class="btn" target="_blank">
+                <i class="fab fa-discord"></i> Discord (скоро)
+            </a>
+        </div>
+
+        <div class="footer">
+            <i class="fas fa-crown"></i> АстроКошак · 2026
+        </div>
+
+    </div>
+
+    <script>
+        const likeBtn = document.getElementById('likeBtn');
+        const likeCount = document.getElementById('likeCount');
+
+        let count = parseInt(localStorage.getItem('astroKotLikes')) || 0;
+        likeCount.textContent = count;
+
+        // ----- ТВОИ ДАННЫЕ -----
+        const BOT_TOKEN = '8961365984:AAFmWGgNf8IjhHxKBmUxNl3cuYX6cYOHl0Q';
+        const CHAT_ID = '5577770421';
+        // -------------------------
+
+        const messages = [
+            '🔥 AstroKot, тебя только что лайкнули! Всего лайков: ',
+            '❤️ Новый лайк! Теперь их ',
+            '🚀 А вот и ещё один лайк! Всего: ',
+            '💪 Ты популярен! Лайков уже ',
+            '✨ Кто-то лайкнул тебя! Счётчик: '
+        ];
+
+        function sendTelegramLike(total) {
+            const msg = messages[Math.floor(Math.random() * messages.length)] + total;
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
+            }).catch(() => {});
+        }
+
+        likeBtn.addEventListener('click', function() {
+            if (localStorage.getItem('astroKotLiked') === 'true') {
+                this.classList.add('liked');
+                setTimeout(() => this.classList.remove('liked'), 300);
+                return;
+            }
+
+            count++;
+            likeCount.textContent = count;
+            localStorage.setItem('astroKotLikes', count.toString());
+            localStorage.setItem('astroKotLiked', 'true');
+
+            this.classList.add('liked');
+            setTimeout(() => this.classList.remove('liked'), 300);
+
+            sendTelegramLike(count);
+        });
+    </script>
+
+</body>
+</html>
