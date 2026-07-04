@@ -20,7 +20,12 @@
             padding: 1.5rem;
             color: #fff;
         }
-        .container { max-width: 700px; width: 100%; }
+        .container {
+            max-width: 700px;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 48px;
+        }
         .card {
             background: rgba(18, 25, 55, 0.6);
             backdrop-filter: blur(14px);
@@ -29,8 +34,15 @@
             padding: 2.5rem 2rem 2.2rem;
             box-shadow: 0 25px 50px -10px rgba(0,0,0,0.8);
             transition: 0.4s;
+            position: relative;
+            overflow: hidden;
         }
         .card:hover { border-color: rgba(120, 180, 255, 0.2); }
+
+        /* Убираем вылезающий круг */
+        .card::before {
+            display: none;
+        }
 
         h1 {
             font-size: 2rem;
@@ -318,6 +330,15 @@
             .link-block .platform-icon { font-size: 0.8rem; }
             h1 { font-size: 1.5rem; }
             .avatar-section { grid-template-columns: 1fr; }
+            .container { border-radius: 32px; }
+            .card { border-radius: 32px; }
+        }
+
+        /* ФИКС МОБИЛЬНОГО БАГА — круг не вылезает */
+        .container,
+        .card {
+            overflow: hidden;
+            position: relative;
         }
     </style>
 </head>
@@ -458,6 +479,8 @@
                     padding: 2.5rem 2rem 2.2rem;
                     box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.8);
                     text-align: center;
+                    overflow: hidden;
+                    position: relative;
                 }
                 .avatar {
                     width: 110px;
@@ -549,7 +572,7 @@
                 }
                 .share-btn:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); }
                 @media (max-width: 480px) {
-                    .card { padding: 1.8rem 1.2rem; }
+                    .card { padding: 1.8rem 1.2rem; border-radius: 32px; }
                     .name { font-size: 1.5rem; }
                     .avatar { width: 85px; height: 85px; font-size: 2.5rem; }
                 }
@@ -907,7 +930,6 @@
         if (profileUsername) {
             const data = getProfile(profileUsername);
             if (data) {
-                // Увеличиваем просмотры
                 data.views = (data.views || 0) + 1;
                 saveProfile(data);
                 document.write(generateProfileHTML(data));
