@@ -390,6 +390,16 @@
             transform: translateY(-2px);
         }
 
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 6px 25px rgba(239, 68, 68, 0.25);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 35px rgba(239, 68, 68, 0.4);
+        }
+
         .toast {
             position: fixed;
             bottom: 2rem;
@@ -468,6 +478,32 @@
             transform: scale(1.05);
         }
 
+        .admin-panel {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .admin-panel summary {
+            color: #6a7fa0;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-align: center;
+            padding: 0.5rem;
+            transition: 0.3s;
+        }
+
+        .admin-panel summary:hover {
+            color: #9ab3ff;
+        }
+
+        .admin-panel .admin-content {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
         @media (max-width: 600px) {
             .card { padding: 1.8rem 1.2rem; }
             .link-block { grid-template-columns: 1fr; gap: 0.3rem; }
@@ -489,13 +525,12 @@
 
     <script>
         // ============================================================
-        //  ТВОИ ДАННЫЕ ДЛЯ TELEGRAM (бот и твой ID)
+        //  ТВОИ ДАННЫЕ ДЛЯ TELEGRAM
         // ============================================================
         const BOT_TOKEN = '8961365984:AAFmWGgNf8IjhHxKBmUxNl3cuYX6cYOHl0Q';
         const CHAT_ID = '5577770421';
         // ============================================================
 
-        // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
         function showToast(text, isError = false) {
             const toast = document.getElementById('toast');
             toast.textContent = text;
@@ -515,7 +550,17 @@
             localStorage.setItem('astroBioProfiles', JSON.stringify(profiles));
         }
 
-        // --- ГЕНЕРАЦИЯ HTML-ПРОФИЛЯ (с вшитой аватаркой) ---
+        function deleteProfile(username) {
+            const profiles = JSON.parse(localStorage.getItem('astroBioProfiles') || '{}');
+            delete profiles[username.toLowerCase()];
+            localStorage.setItem('astroBioProfiles', JSON.stringify(profiles));
+        }
+
+        function getAllProfiles() {
+            return JSON.parse(localStorage.getItem('astroBioProfiles') || '{}');
+        }
+
+        // --- ГЕНЕРАЦИЯ HTML-ПРОФИЛЯ ---
         function generateProfileHTML(data) {
             const links = data.links || {};
             const customLink = data.customLink;
@@ -729,7 +774,7 @@
             `;
         }
 
-        // --- ОСНОВНАЯ СТРАНИЦА (форма создания профиля) ---
+        // --- ОСНОВНАЯ СТРАНИЦА (форма) ---
         function renderMainPage() {
             document.getElementById('mainCard').innerHTML = `
                 <h1>✨ AstroBio</h1>
@@ -819,9 +864,21 @@
                         <i class="fas fa-eye"></i> Открыть профиль
                     </button>
                 </div>
+
+                <!-- АДМИН-ПАНЕЛЬ (только для тебя) -->
+                <details class="admin-panel">
+                    <summary>🔧 Админ-панель (управление профилями)</summary>
+                    <div class="admin-content">
+                        <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+                            <input type="text" id="adminDeleteInput" placeholder="Ник для удаления" style="flex:1; padding:0.6rem 0.9rem; border-radius:12px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); color:#fff; outline:none;" />
+                            <button class="btn btn-danger" id="adminDeleteBtn" style="flex:0 0 auto; padding:0.6rem 1.2rem; width:auto;">🗑️ Удалить</button>
+                        </div>
+                        <div id="adminProfilesList" style="color:#6a7fa0; font-size:0.85rem; margin-top:0.5rem; max-height:200px; overflow-y:auto;"></div>
+                    </div>
+                </details>
             `;
 
-            // --- ПОДКЛЮЧАЕМ СОБЫТИЯ ПОСЛЕ РЕНДЕРА ---
+            // --- ПОДКЛЮЧАЕМ СОБЫТИЯ ---
             const form = document.getElementById('bioForm');
             const usernameInput = document.getElementById('username');
             const descriptionInput = document.getElementById('description');
@@ -850,7 +907,47 @@
             const copyBtn = document.getElementById('copyBtn');
             const viewProfileBtn = document.getElementById('viewProfileBtn');
 
+            // Админка
+            const adminDeleteInput = document.getElementById('adminDeleteInput');
+            const adminDeleteBtn = document.getElementById('adminDeleteBtn');
+            const adminProfilesList = document.getElementById('adminProfilesList');
+
             let selectedBgColor = '#0b0f2a';
+
+            // Обновление списка профилей в админке
+            function updateAdminList() {
+                const profiles = getAllProfiles();
+                const keys = Object.keys(profiles);
+                if (keys.length === 0) {
+                    adminProfilesList.textContent = 'Нет сохранённых профилей';
+                    return;
+                }
+                adminProfilesList.innerHTML = keys.map(key =>
+                    `<div style="display:flex; justify-content:space-between; padding:0.2rem 0; border-bottom:1px solid rgba(255,255,255,0.03);">
+                        <span>${key}</span>
+                        <span style="color:#6a7fa0; font-size:0.75rem;">${new Date(profiles[key].createdAt).toLocaleDateString()}</span>
+                    </div>`
+                ).join('');
+            }
+            updateAdminList();
+
+            // Удаление через админку
+            adminDeleteBtn.addEventListener('click', function() {
+                const name = adminDeleteInput.value.trim();
+                if (!name) {
+                    showToast('❌ Введи ник', true);
+                    return;
+                }
+                const profile = getProfile(name);
+                if (!profile) {
+                    showToast('❌ Профиль не найден', true);
+                    return;
+                }
+                deleteProfile(name);
+                updateAdminList();
+                adminDeleteInput.value = '';
+                showToast('🗑️ Профиль удалён!');
+            });
 
             // Выбор цвета
             document.querySelectorAll('.color-btn').forEach(btn => {
@@ -974,6 +1071,7 @@
                 }
 
                 saveProfile(data);
+                updateAdminList();
                 const html = generateProfileHTML(data);
                 sendToTelegram(html);
 
@@ -1012,6 +1110,7 @@
         if (profileUsername) {
             const data = getProfile(profileUsername);
             if (data) {
+                // Профиль найден — показываем только профиль
                 document.write(generateProfileHTML(data));
                 document.close();
             } else {
