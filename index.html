@@ -3,12 +3,117 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AstroKot · АстроКошак</title>
+    <title>AstroKot · Загрузка...</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
+        /* ----- СТИЛИ ДЛЯ ЗАГРУЗКИ ----- */
+        #bootScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            font-family: 'Space Mono', monospace;
+            color: #00ff41;
+            transition: opacity 0.8s ease;
+        }
+
+        #bootScreen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .boot-container {
+            text-align: left;
+            padding: 2rem;
+            max-width: 700px;
+            width: 90%;
+        }
+
+        .boot-line {
+            opacity: 0;
+            animation: typeIn 0.15s forwards;
+            font-size: 1rem;
+            line-height: 1.8;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        }
+
+        .boot-line.delay-1 { animation-delay: 0.1s; }
+        .boot-line.delay-2 { animation-delay: 0.8s; }
+        .boot-line.delay-3 { animation-delay: 1.6s; }
+        .boot-line.delay-4 { animation-delay: 2.4s; }
+        .boot-line.delay-5 { animation-delay: 3.2s; }
+        .boot-line.delay-6 { animation-delay: 4.0s; }
+        .boot-line.delay-7 { animation-delay: 4.8s; }
+        .boot-line.delay-8 { animation-delay: 5.6s; }
+        .boot-line.delay-9 { animation-delay: 6.4s; }
+        .boot-line.delay-10 { animation-delay: 7.2s; }
+        .boot-line.delay-11 { animation-delay: 8.0s; }
+
+        .boot-cursor {
+            display: inline-block;
+            width: 12px;
+            height: 20px;
+            background: #00ff41;
+            animation: blink 0.7s step-end infinite;
+            vertical-align: text-bottom;
+            margin-left: 4px;
+        }
+
+        .boot-highlight {
+            color: #00ccff;
+        }
+
+        .boot-success {
+            color: #00ff41;
+        }
+
+        .boot-warning {
+            color: #ffaa00;
+        }
+
+        .boot-ascii {
+            color: #00ff41;
+            font-size: 0.7rem;
+            line-height: 1.2;
+            white-space: pre;
+            opacity: 0.3;
+            margin-top: 10px;
+            animation: typeIn 0.1s forwards;
+            animation-delay: 9s;
+            opacity: 0;
+        }
+
+        @keyframes typeIn {
+            0% { opacity: 0; transform: translateY(4px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* ----- ОСНОВНОЙ САЙТ (появляется после загрузки) ----- */
+        #mainSite {
+            opacity: 0;
+            transition: opacity 1.2s ease;
+        }
+
+        #mainSite.visible {
+            opacity: 1;
+        }
+
+        /* ----- СТИЛИ ОСНОВНОГО САЙТА ----- */
         * {
             margin: 0;
             padding: 0;
@@ -55,13 +160,6 @@
             border: 2px solid rgba(255, 255, 255, 0.2);
             user-select: none;
             text-shadow: 0 0 20px rgba(255,255,255,0.3);
-        }
-
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
         }
 
         .name {
@@ -250,67 +348,127 @@
             .name { font-size: 1.8rem; }
             .avatar { width: 85px; height: 85px; font-size: 2.5rem; }
             .badge { font-size: 0.55rem; padding: 0.2rem 0.7rem; }
+            .boot-line { font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
+    <!-- ===== ЭКРАН ЗАГРУЗКИ ===== -->
+    <div id="bootScreen">
+        <div class="boot-container">
+            <div class="boot-line delay-1">
+                <span class="boot-highlight">⏣</span> INITIALIZING ASTROKOT SYSTEM...
+                <span class="boot-cursor"></span>
+            </div>
+            <div class="boot-line delay-2">
+                <span class="boot-success">✓</span> Loading core modules...
+            </div>
+            <div class="boot-line delay-3">
+                <span class="boot-success">✓</span> Establishing neural link...
+            </div>
+            <div class="boot-line delay-4">
+                <span class="boot-success">✓</span> Flipple Arcade interface detected
+            </div>
+            <div class="boot-line delay-5">
+                <span class="boot-warning">⚠</span> Nostalgia module: Omlet Arcade legacy found
+            </div>
+            <div class="boot-line delay-6">
+                <span class="boot-success">✓</span> ESP32 compiler ready
+            </div>
+            <div class="boot-line delay-7">
+                <span class="boot-success">✓</span> Minecraft creative engine loaded
+            </div>
+            <div class="boot-line delay-8">
+                <span class="boot-highlight">✦</span> AstroKot identity confirmed: <span style="color:#00ff41;">BGgemsTV</span>
+            </div>
+            <div class="boot-line delay-9">
+                <span class="boot-success">✓</span> Telemetry link established with Telegram
+            </div>
+            <div class="boot-line delay-10">
+                <span style="color:#00ff41;">▸</span> Welcome, <strong style="color:#00ff41;">AstroKot</strong>. System ready.
+            </div>
+            <div class="boot-line delay-11" style="color:#00ccff; font-size:0.9rem;">
+                <span style="color:#ffaa00;">⟳</span> Loading your universe...
+            </div>
 
-        <div class="avatar">
-            🐱
+            <div class="boot-ascii">
+   ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄ 
+  ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌
+  ▐░█▀▀▀▀▀▀▀▀▀ ▐░█▀▀▀▀▀▀▀█░▌▐░█▀▀▀▀▀▀▀█░▌▐░█▀▀▀▀▀▀▀█░▌
+  ▐░▌          ▐░▌       ▐░▌▐░▌       ▐░▌▐░▌       ▐░▌
+  ▐░▌          ▐░▌       ▐░▌▐░▌       ▐░▌▐░▌       ▐░▌
+  ▐░▌          ▐░▌       ▐░▌▐░▌       ▐░▌▐░▌       ▐░▌
+  ▐░▌          ▐░▌       ▐░▌▐░▌       ▐░▌▐░▌       ▐░▌
+  ▐░▌          ▐░▌       ▐░▌▐░▌       ▐░▌▐░▌       ▐░▌
+  ▐░█▄▄▄▄▄▄▄▄▄ ▐░█▄▄▄▄▄▄▄█░▌▐░█▄▄▄▄▄▄▄█░▌▐░█▄▄▄▄▄▄▄█░▌
+  ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌
+   ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀ 
+            </div>
         </div>
+    </div>
 
-        <div>
-            <span class="name">AstroKot</span>
-            <span class="badge"><i class="fas fa-rocket" style="margin-right: 5px;"></i> НАЧИНАЮЩИЙ FLIPPLE ЧЕЛ</span>
+    <!-- ===== ОСНОВНОЙ САЙТ ===== -->
+    <div id="mainSite">
+        <div class="card">
+
+            <div class="avatar">
+                🐱
+            </div>
+
+            <div>
+                <span class="name">AstroKot</span>
+                <span class="badge"><i class="fas fa-rocket" style="margin-right: 5px;"></i> НАЧИНАЮЩИЙ FLIPPLE ЧЕЛ</span>
+            </div>
+            <div class="subtitle">
+                <i class="fas fa-gamepad" style="margin-right: 6px;"></i> Flipple Arcade
+            </div>
+
+            <div class="bio">
+                <i class="fas fa-quote-left" style="opacity: 0.4; font-size: 0.9rem;"></i>
+                Привет, я <strong>AstroKot</strong>! 🚀<br />
+                На данный момент я начинаю свою деятельность на Flipple Arcade.<br />
+                Также кто меня помнит — на Omlet Arcade под ником <span class="old-nick"><i class="fas fa-star"></i> BGgemsTV</span><br /><br />
+                <i class="fas fa-code" style="color: #34d399;"></i> Обожаю программировать на <span class="tag">ESP32</span> и создавать всякое в <span class="tag">Майнкрафте</span> 🧱<br />
+                <i class="fas fa-bolt" style="color: #fbbf24;"></i> Изучаю платформу, ищу свой стиль и готовлю крутой контент.<br />
+                <i class="fas fa-users" style="color: #60a5fa;"></i> Буду рад новым знакомствам и совместным стримам!
+            </div>
+
+            <div class="links">
+                <button class="btn btn-like" id="likeBtn">
+                    <i class="fas fa-heart"></i>
+                    Лайкнуть
+                    <span class="like-count" id="likeCount">0</span>
+                </button>
+
+                <a href="#" class="btn" target="_blank">
+                    <i class="fab fa-discord"></i> Discord (скоро)
+                </a>
+            </div>
+
+            <div class="footer">
+                <i class="fas fa-crown"></i> АстроКошак · 2026
+            </div>
+
         </div>
-        <div class="subtitle">
-            <i class="fas fa-gamepad" style="margin-right: 6px;"></i> Flipple Arcade
-        </div>
-
-        <div class="bio">
-            <i class="fas fa-quote-left" style="opacity: 0.4; font-size: 0.9rem;"></i>
-            Привет, я <strong>AstroKot</strong>! 🚀<br />
-            На данный момент я начинаю свою деятельность на Flipple Arcade.<br />
-            Также кто меня помнит — на Omlet Arcade под ником <span class="old-nick"><i class="fas fa-star"></i> BGgemsTV</span><br /><br />
-            <i class="fas fa-code" style="color: #34d399;"></i> Обожаю программировать на <span class="tag">ESP32</span> и создавать всякое в <span class="tag">Майнкрафте</span> 🧱<br />
-            <i class="fas fa-bolt" style="color: #fbbf24;"></i> Изучаю платформу, ищу свой стиль и готовлю крутой контент.<br />
-            <i class="fas fa-users" style="color: #60a5fa;"></i> Буду рад новым знакомствам и совместным стримам!
-        </div>
-
-        <div class="links">
-            <button class="btn btn-like" id="likeBtn">
-                <i class="fas fa-heart"></i>
-                Лайкнуть
-                <span class="like-count" id="likeCount">0</span>
-            </button>
-
-            <a href="#" class="btn btn-primary" target="_blank">
-                <i class="fab fa-twitch"></i> Twitch (скоро)
-            </a>
-            <a href="#" class="btn" target="_blank">
-                <i class="fab fa-discord"></i> Discord (скоро)
-            </a>
-        </div>
-
-        <div class="footer">
-            <i class="fas fa-crown"></i> АстроКошак · 2026
-        </div>
-
     </div>
 
     <script>
+        // ===== ЗАГРУЗКА: через 9 секунд показываем сайт =====
+        setTimeout(() => {
+            document.getElementById('bootScreen').classList.add('hidden');
+            document.getElementById('mainSite').classList.add('visible');
+        }, 9500);
+
+        // ===== ЛАЙКИ =====
         const likeBtn = document.getElementById('likeBtn');
         const likeCount = document.getElementById('likeCount');
 
         let count = parseInt(localStorage.getItem('astroKotLikes')) || 0;
         likeCount.textContent = count;
 
-        // ----- ТВОИ ДАННЫЕ -----
         const BOT_TOKEN = '8961365984:AAFmWGgNf8IjhHxKBmUxNl3cuYX6cYOHl0Q';
         const CHAT_ID = '5577770421';
-        // -------------------------
 
         const messages = [
             '🔥 AstroKot, тебя только что лайкнули! Всего лайков: ',
