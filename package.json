@@ -1,15 +1,10 @@
 {
   "name": "astrobio",
   "version": "1.0.0",
-  "description": "Создай свой космический профиль для Flipple Arcade",
-  "main": "index.html",
   "scripts": {
     "start": "npx serve ."
   },
   "dependencies": {
     "serve": "^14.2.0"
-  },
-  "keywords": ["bio", "flipplе", "astrokot"],
-  "author": "AstroKot",
-  "license": "MIT"
+  }
 }
