@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AstroBio · Редактор био</title>
+    <title>AstroBio · Мои био</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,800&display=swap" rel="stylesheet" />
@@ -37,6 +37,7 @@
             0% { opacity: 0.1; transform: scale(0.8); }
             100% { opacity: 1; transform: scale(1.2); }
         }
+
         .container {
             max-width: 860px;
             width: 100%;
@@ -46,6 +47,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 1.5rem;
         }
+
         .warning-banner {
             grid-column: 1 / -1;
             background: rgba(255,50,50,0.08);
@@ -151,7 +153,6 @@
             cursor: pointer;
         }
         .file-input-wrapper .fake-btn:hover { background: rgba(255,255,255,0.07); }
-
         .file-preview {
             margin-top: 0.3rem;
             display: flex;
@@ -159,8 +160,7 @@
             flex-wrap: wrap;
         }
         .file-preview .preview-thumb {
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.04);
@@ -244,39 +244,6 @@
             background: rgba(255,255,255,0.05);
         }
 
-        .toggle-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 0.3rem 0;
-        }
-        .toggle-wrapper .toggle-label {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.3);
-            font-weight: 500;
-        }
-        .toggle {
-            width: 40px;
-            height: 22px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 30px;
-            cursor: pointer;
-            transition: 0.3s;
-            position: relative;
-            flex-shrink: 0;
-        }
-        .toggle.active { background: rgba(108,140,255,0.4); }
-        .toggle .toggle-dot {
-            width: 16px; height: 16px;
-            background: #fff;
-            border-radius: 50%;
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            transition: 0.3s;
-        }
-        .toggle.active .toggle-dot { left: 21px; }
-
         .btn {
             display: inline-flex;
             align-items: center;
@@ -317,6 +284,15 @@
             color: rgba(255,255,255,0.4);
         }
         .btn-outline:hover { background: rgba(255,255,255,0.06); }
+        .btn-danger {
+            background: rgba(239,68,68,0.12);
+            border: 1px solid rgba(239,68,68,0.12);
+        }
+        .btn-danger:hover {
+            background: rgba(239,68,68,0.2);
+            border-color: rgba(239,68,68,0.2);
+            transform: translateY(-2px);
+        }
 
         /* ---- ПРЕДПРОСМОТР ---- */
         .preview-card {
@@ -435,36 +411,6 @@
         .preview-card .preview-socials .ps-btn:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); }
         .preview-card .preview-socials .ps-btn i { color: rgba(255,255,255,0.15); font-size: 0.6rem; }
 
-        .preview-card .preview-reactions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            justify-content: center;
-            margin-top: 0.5rem;
-        }
-        .preview-card .preview-reactions .react-btn {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.04);
-            border-radius: 30px;
-            padding: 0.2rem 0.6rem;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            color: rgba(255,255,255,0.3);
-        }
-        .preview-card .preview-reactions .react-btn:hover {
-            background: rgba(255,255,255,0.08);
-            transform: scale(1.05);
-        }
-        .preview-card .preview-reactions .react-btn .count {
-            font-size: 0.6rem;
-            font-weight: 600;
-            color: rgba(255,255,255,0.2);
-        }
-
         .preview-label {
             position: absolute;
             top: 0.5rem;
@@ -523,7 +469,7 @@
         </div>
 
         <div class="form-card" id="formCard">
-            <h2>✨ Редактор био</h2>
+            <h2>✨ Создать био</h2>
             <div class="sub">Заполни поля — справа будет предпросмотр</div>
             <div id="formContent">
                 <!-- Контент через JS -->
@@ -540,7 +486,6 @@
                 <div class="preview-desc" id="previewDesc">Твоё описание появится здесь</div>
                 <div class="preview-gallery" id="previewGallery"></div>
                 <div class="preview-socials" id="previewSocials"></div>
-                <div class="preview-reactions" id="previewReactions"></div>
             </div>
         </div>
     </div>
@@ -585,7 +530,6 @@
                 bgImage: null,
                 bgStyle: 'default',
                 textColor: '#ffffff',
-                reactionsEnabled: true,
                 images: [],
                 links: {}
             };
@@ -618,10 +562,6 @@
                 steam: 'Steam',
                 flipple: 'Flipple Arcade'
             };
-
-            // ---- РЕАКЦИИ ----
-            const reactions = ['❤️', '👍', '😂', '😮', '😢', '🔥'];
-            let reactionCounts = {};
 
             // ---- ОБНОВЛЕНИЕ ПРЕДПРОСМОТРА ----
             function updatePreview() {
@@ -679,32 +619,6 @@
                     }
                 }
                 socialsEl.innerHTML = socialHTML || '<span style="color:rgba(255,255,255,0.08);font-size:0.6rem;">Нет ссылок</span>';
-
-                // Реакции
-                const reactionsEl = document.getElementById('previewReactions');
-                if (bioData.reactionsEnabled) {
-                    let reactHTML = '';
-                    for (const emoji of reactions) {
-                        const count = reactionCounts[emoji] || 0;
-                        reactHTML += `<button class="react-btn" data-emoji="${emoji}">
-                            ${emoji} <span class="count">${count || ''}</span>
-                        </button>`;
-                    }
-                    reactionsEl.innerHTML = reactHTML;
-
-                    reactionsEl.querySelectorAll('.react-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const emoji = this.dataset.emoji;
-                            if (!reactionCounts[emoji]) reactionCounts[emoji] = 0;
-                            reactionCounts[emoji]++;
-                            updatePreview();
-                            showToast(`Поставлено ${emoji}`);
-                        });
-                    });
-                } else {
-                    reactionsEl.innerHTML =
-                        '<span style="color:rgba(255,255,255,0.08);font-size:0.6rem;">Реакции отключены</span>';
-                }
             }
 
             // ---- ГЕНЕРАЦИЯ ФОРМЫ ----
@@ -781,220 +695,701 @@
                             <label class="color-btn ${bioData.bgColor === '#2e1a0a' ? 'active' : ''}" style="background:#2e1a0a;"><input type="radio" name="bgColor" value="#2e1a0a" ${bioData.bgColor === '#2e1a0a' ? 'checked' : ''} /></label>
                             <label class="color-btn ${bioData.bgColor === '#0a0a2e' ? 'active' : ''}" style="background:#0a0a2e;"><input type="radio" name="bgColor" value="#0a0a2e" ${bioData.bgColor === '#0a0a2e' ? 'checked' : ''} /></label>
                             <label class="color-btn ${bioData.bgColor === '#1a0a0a' ? 'active' : ''}" style="background:#1a0a0a;"><input type="radio" name="bgColor" value="#1a0a0a" ${bioData.bgColor === '#1a0a0a' ? 'checked' : ''} /></label>
-                            <label class="color-btn ${bioData.bgColor === '#0a1a1a' ? 'active' : ''}" style="background:#0a1a1a;"><input type="radio" name="bgColor" value="#0a1a1a" ${bioData.bgColor === '#0a1a1a' ? 'checked' : ''} /></label>
-                        </div>
-                    </div>
+                            <label class="color-btn ${bioData.bgColor === '#0a1a1a' ? 'active' : ''}" style="background:#0a1a1a;"><input type="radio" name="bgColor" value="#0a1a1a" ${bio <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AstroBio · Мои био</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: radial-gradient(circle at 30% 20%, #0a0a1a, #050510);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            padding: 1.5rem;
+            color: #fff;
+            position: relative;
+        }
+        .stars-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+            overflow: hidden;
+        }
+        .star-dot {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.1; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
 
-                    <div class="form-group">
-                        <label>🌈 Стиль фона</label>
-                        <select id="bgStyle">
-                            <option value="default" ${bioData.bgStyle === 'default' ? 'selected' : ''}>🌌 Классический</option>
-                            <option value="galaxy" ${bioData.bgStyle === 'galaxy' ? 'selected' : ''}>🌠 Галактика</option>
-                            <option value="sunset" ${bioData.bgStyle === 'sunset' ? 'selected' : ''}>🌅 Закат</option>
-                            <option value="ocean" ${bioData.bgStyle === 'ocean' ? 'selected' : ''}>🌊 Океан</option>
-                            <option value="forest" ${bioData.bgStyle === 'forest' ? 'selected' : ''}>🌿 Лес</option>
-                        </select>
-                    </div>
+        .container {
+            max-width: 860px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
 
-                    <div class="form-group">
-                        <label>🎨 Цвет текста</label>
-                        <select id="textColor">
-                            <option value="#ffffff" ${bioData.textColor === '#ffffff' ? 'selected' : ''}>⬜ Белый</option>
-                            <option value="#f0f9ff" ${bioData.textColor === '#f0f9ff' ? 'selected' : ''}>💠 Голубой</option>
-                            <option value="#fbbf24" ${bioData.textColor === '#fbbf24' ? 'selected' : ''}>⭐ Золотой</option>
-                            <option value="#34d399" ${bioData.textColor === '#34d399' ? 'selected' : ''}>🌿 Изумрудный</option>
-                            <option value="#f472b6" ${bioData.textColor === '#f472b6' ? 'selected' : ''}>🌸 Розовый</option>
-                        </select>
-                    </div>
+        .warning-banner {
+            grid-column: 1 / -1;
+            background: rgba(255,50,50,0.08);
+            border: 1px solid rgba(255,50,50,0.15);
+            border-radius: 16px;
+            padding: 0.8rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(12px);
+            animation: pulseWarning 2.5s infinite;
+        }
+        .warning-banner i { color: #ff4444; font-size: 1.1rem; }
+        .warning-banner span { color: #ff8888; font-size: 0.85rem; font-weight: 500; }
+        @keyframes pulseWarning {
+            0%, 100% { border-color: rgba(255,50,50,0.15); }
+            50% { border-color: rgba(255,50,50,0.4); }
+        }
 
-                    <div class="form-group">
-                        <label>🔗 Соцсети</label>
-                        ${socialFields}
-                    </div>
+        .form-card {
+            background: rgba(18,25,55,0.12);
+            backdrop-filter: blur(16px);
+            border-radius: 32px;
+            padding: 1.8rem 1.5rem;
+            border: 1px solid rgba(255,255,255,0.03);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .form-card::-webkit-scrollbar { width: 4px; }
+        .form-card::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); border-radius: 10px; }
+        .form-card::-webkit-scrollbar-thumb { background: rgba(108,140,255,0.08); border-radius: 10px; }
 
-                    <div class="form-group">
-                        <label>🖼️ Картинки (до 3 шт)</label>
-                        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem;">
-                            <div class="file-input-wrapper">
-                                <div class="fake-btn">📷 Картинка 1</div>
-                                <input type="file" id="img1File" accept="image/*" />
-                            </div>
-                            <div class="file-input-wrapper">
-                                <div class="fake-btn">📷 Картинка 2</div>
-                                <input type="file" id="img2File" accept="image/*" />
-                            </div>
-                            <div class="file-input-wrapper">
-                                <div class="fake-btn">📷 Картинка 3</div>
-                                <input type="file" id="img3File" accept="image/*" />
-                            </div>
-                        </div>
-                        <div class="file-preview" id="imgPreview"></div>
-                    </div>
+        .form-card h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f0f9ff, #b6d4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.2rem;
+        }
+        .form-card .sub {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.2);
+            margin-bottom: 1.2rem;
+        }
 
-                    <div class="form-group">
-                        <label>🔘 Реакции</label>
-                        <div class="toggle-wrapper">
-                            <div class="toggle ${bioData.reactionsEnabled ? 'active' : ''}" id="reactionsToggle">
-                                <div class="toggle-dot"></div>
-                            </div>
-                            <span class="toggle-label">${bioData.reactionsEnabled ? 'Включены' : 'Выключены'}</span>
-                        </div>
-                    </div>
+        .form-group { margin-bottom: 0.8rem; }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.3);
+            margin-bottom: 0.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.6rem 0.9rem;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            outline: none;
+            backdrop-filter: blur(4px);
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: rgba(108,140,255,0.2);
+            background: rgba(255,255,255,0.06);
+        }
+        .form-group textarea { resize: vertical; min-height: 60px; }
 
-                    <button class="btn btn-success" id="saveBioBtn">
-                        <i class="fas fa-save"></i> Сохранить био
-                    </button>
-                `;
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0; top: 0; opacity: 0;
+            width: 100%; height: 100%;
+            cursor: pointer;
+        }
+        .file-input-wrapper .fake-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 0.5rem 0.8rem;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.3);
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .file-input-wrapper .fake-btn:hover { background: rgba(255,255,255,0.07); }
+        .file-preview {
+            margin-top: 0.3rem;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .file-preview .preview-thumb {
+            width: 60px; height: 60px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.04);
+            position: relative;
+        }
+        .file-preview .preview-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .file-preview .preview-thumb .remove-img {
+            position: absolute;
+            top: 2px; right: 2px;
+            background: rgba(239,68,68,0.8);
+            border: none;
+            color: #fff;
+            border-radius: 50%;
+            width: 20px; height: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-                // ---- ПОДКЛЮЧАЕМ СОБЫТИЯ ----
-                const fields = ['bioUsername', 'bioDescription', 'bioRole', 'textColor', 'bgStyle'];
-                fields.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.addEventListener('input', updatePreviewFromForm);
-                });
+        .color-options {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 0.2rem;
+        }
+        .color-options .color-btn {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .color-options .color-btn:hover { transform: scale(1.1); }
+        .color-options .color-btn.active {
+            border-color: #fff;
+            box-shadow: 0 0 20px rgba(255,255,255,0.08);
+        }
+        .color-options .color-btn.active::after {
+            content: '✓';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 0.8rem;
+            text-shadow: 0 0 10px rgba(0,0,0,0.9);
+        }
+        .color-options .color-btn input[type="radio"] { display: none; }
 
-                document.querySelectorAll('#colorOptions .color-btn input[type="radio"]').forEach(el => {
-                    el.addEventListener('change', function() {
-                        document.querySelectorAll('#colorOptions .color-btn').forEach(b => b.classList.remove(
-                        'active'));
-                        this.closest('.color-btn').classList.add('active');
-                        bioData.bgColor = this.value;
-                        bioData.bgImage = null;
-                        document.getElementById('bgPreview').textContent = 'Нет';
-                        document.getElementById('bgPreview').style.color = 'rgba(255,255,255,0.2)';
-                        updatePreview();
-                    });
-                });
+        .link-block {
+            display: grid;
+            grid-template-columns: 90px 1fr;
+            gap: 0.4rem;
+            margin-bottom: 0.4rem;
+            align-items: center;
+        }
+        .link-block .platform-icon {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .link-block .platform-icon i { width: 16px; color: #a855f7; font-size: 0.8rem; }
+        .link-block input {
+            padding: 0.4rem 0.7rem;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.04);
+            color: #fff;
+            font-size: 0.75rem;
+            outline: none;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .link-block input:focus {
+            border-color: rgba(108,140,255,0.15);
+            background: rgba(255,255,255,0.05);
+        }
 
-                document.getElementById('avatarFile').addEventListener('change', function(e) {
-                    const file = this.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(ev) {
-                            const img = new Image();
-                            img.onload = function() {
-                                const canvas = document.createElement('canvas');
-                                const ctx = canvas.getContext('2d');
-                                let w = img.width,
-                                    h = img.height;
-                                const max = 200;
-                                if (w > h) { if (w > max) { h = Math.round(h * (max / w));
-                                        w = max; } } else { if (h > max) { w = Math.round(w * (max / h));
-                                        h = max; } }
-                                canvas.width = w;
-                                canvas.height = h;
-                                ctx.drawImage(img, 0, 0, w, h);
-                                bioData.avatarData = canvas.toDataURL('image/jpeg', 0.6);
-                                bioData.avatarType = 'image';
-                                updatePreview();
-                            };
-                            img.src = ev.target.result;
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0.7rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #fff;
+            width: 100%;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary {
+            background: rgba(79,122,255,0.15);
+            border: 1px solid rgba(79,122,255,0.15);
+        }
+        .btn-primary:hover {
+            background: rgba(79,122,255,0.25);
+            border-color: rgba(79,122,255,0.25);
+            transform: translateY(-2px);
+        }
+        .btn-success {
+            background: rgba(16,185,129,0.12);
+            border: 1px solid rgba(16,185,129,0.12);
+        }
+        .btn-success:hover {
+            background: rgba(16,185,129,0.2);
+            border-color: rgba(16,185,129,0.2);
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.04);
+            color: rgba(255,255,255,0.4);
+        }
+        .btn-outline:hover { background: rgba(255,255,255,0.06); }
+        .btn-danger {
+            background: rgba(239,68,68,0.12);
+            border: 1px solid rgba(239,68,68,0.12);
+        }
+        .btn-danger:hover {
+            background: rgba(239,68,68,0.2);
+            border-color: rgba(239,68,68,0.2);
+            transform: translateY(-2px);
+        }
 
-                document.getElementById('avatarEmoji').addEventListener('change', function() {
-                    if (!document.getElementById('avatarFile').files[0]) {
-                        bioData.avatarType = 'emoji';
-                        bioData.avatarEmoji = this.value;
-                        bioData.avatarData = null;
-                        updatePreview();
-                    }
-                });
+        /* ---- ПРЕДПРОСМОТР ---- */
+        .preview-card {
+            background: rgba(18,25,55,0.08);
+            backdrop-filter: blur(16px);
+            border-radius: 32px;
+            padding: 1.5rem 1.2rem;
+            border: 1px solid rgba(255,255,255,0.03);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+        .preview-card .preview-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            transition: all 0.5s ease;
+        }
+        .preview-card .preview-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            width: 100%;
+        }
+        .preview-card .preview-avatar {
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6c8cff, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 0.5rem;
+            box-shadow: 0 8px 30px rgba(108,140,255,0.08);
+            border: 2px solid rgba(255,255,255,0.04);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .preview-card .preview-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .preview-card .preview-name {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
+            transition: color 0.3s ease;
+        }
+        .preview-card .preview-role {
+            font-size: 0.55rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.2);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-top: 0.1rem;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.03);
+            padding: 0.15rem 0.8rem;
+            border-radius: 40px;
+            display: inline-block;
+        }
+        .preview-card .preview-desc {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+            margin: 0.5rem 0 0.8rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(0,10,30,0.08);
+            border-radius: 10px;
+            border-left: 2px solid rgba(108,140,255,0.08);
+            min-height: 30px;
+            transition: all 0.3s ease;
+            text-align: left;
+            line-height: 1.6;
+        }
 
-                document.getElementById('bgFile').addEventListener('change', function(e) {
-                    const file = this.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(ev) {
-                            bioData.bgImage = ev.target.result;
-                            document.getElementById('bgPreview').textContent = '✅ Фон';
-                            document.getElementById('bgPreview').style.color = '#34d399';
-                            updatePreview();
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
+        .preview-card .preview-gallery {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 0.5rem 0;
+            width: 100%;
+        }
+        .preview-card .preview-gallery .gallery-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .preview-card .preview-gallery .gallery-img img { width: 100%; height: 100%; object-fit: cover; }
 
-                // Картинки для галереи
-                ['img1File', 'img2File', 'img3File'].forEach((id, index) => {
-                    const num = index;
-                    document.getElementById(id).addEventListener('change', function(e) {
-                        const file = this.files[0];
-                        if (file) {
-                            const reader = new FileReader();
-                            reader.onload = function(ev) {
-                                bioData.images[num] = ev.target.result;
-                                updatePreview();
-                                updateImgPreview();
-                            };
-                            reader.readAsDataURL(file);
-                        }
-                    });
-                });
+        .preview-card .preview-socials {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            justify-content: center;
+            margin: 0.3rem 0;
+            width: 100%;
+        }
+        .preview-card .preview-socials .ps-btn {
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.25);
+            font-size: 0.6rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+        .preview-card .preview-socials .ps-btn:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); }
+        .preview-card .preview-socials .ps-btn i { color: rgba(255,255,255,0.15); font-size: 0.6rem; }
 
-                // Переключатель реакций
-                document.getElementById('reactionsToggle').addEventListener('click', function() {
-                    bioData.reactionsEnabled = !bioData.reactionsEnabled;
-                    this.classList.toggle('active');
-                    this.nextElementSibling.textContent = bioData.reactionsEnabled ? 'Включены' : 'Выключены';
-                    updatePreview();
-                });
+        .preview-label {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.8rem;
+            font-size: 0.5rem;
+            color: rgba(255,255,255,0.05);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            z-index: 2;
+        }
 
-                socialKeys.forEach(key => {
-                    const el = document.getElementById(`link_${key}`);
-                    if (el) {
-                        el.addEventListener('input', function() {
-                            bioData.links[key] = this.value;
-                            updatePreview();
-                        });
-                    }
-                });
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(16,185,129,0.8);
+            backdrop-filter: blur(16px);
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            color: #fff;
+            opacity: 0;
+            transition: all 0.4s ease;
+            pointer-events: none;
+            z-index: 100;
+            max-width: 90%;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast.error { background: rgba(239,68,68,0.8); }
 
-                document.getElementById('saveBioBtn').addEventListener('click', function() {
-                    showToast('✅ Био сохранено!');
-                });
+        @media (max-width: 720px) {
+            .container { grid-template-columns: 1fr; gap: 1rem; }
+            .preview-card { min-height: 200px; }
+            .form-card { max-height: none; }
+        }
+        @media (max-width: 480px) {
+            .form-card { padding: 1.2rem 1rem; border-radius: 24px; }
+            .preview-card { padding: 1rem 0.8rem; border-radius: 24px; min-height: 160px; }
+            .preview-card .preview-avatar { width: 55px; height: 55px; font-size: 1.5rem; }
+            .preview-card .preview-name { font-size: 1rem; }
+            .link-block { grid-template-columns: 1fr; gap: 0.2rem; }
+        }
+    </style>
+</head>
+<body>
 
-                function updatePreviewFromForm() {
-                    bioData.username = document.getElementById('bioUsername').value;
-                    bioData.description = document.getElementById('bioDescription').value;
-                    bioData.role = document.getElementById('bioRole').value;
-                    bioData.textColor = document.getElementById('textColor').value;
-                    bioData.bgStyle = document.getElementById('bgStyle').value;
-                    updatePreview();
+    <div class="stars-bg" id="starsBg"></div>
+
+    <div class="container">
+        <div class="warning-banner">
+            <i class="fas fa-triangle-exclamation"></i>
+            <span>⚠️ Сайт может быть нестабильным. Сохраняй свои био и ссылки!</span>
+        </div>
+
+        <div class="form-card" id="formCard">
+            <h2>✨ Создать био</h2>
+            <div class="sub">Заполни поля — справа будет предпросмотр</div>
+            <div id="formContent">
+                <!-- Контент через JS -->
+            </div>
+        </div>
+
+        <div class="preview-card" id="previewCard">
+            <span class="preview-label">👁️ предпросмотр</span>
+            <div class="preview-bg" id="previewBg" style="background:#0b0f2a;"></div>
+            <div class="preview-content" id="previewContent">
+                <div class="preview-avatar" id="previewAvatar">🐱</div>
+                <div class="preview-name" id="previewName">Твой ник</div>
+                <div class="preview-role" id="previewRole">Твоя роль</div>
+                <div class="preview-desc" id="previewDesc">Твоё описание появится здесь</div>
+                <div class="preview-gallery" id="previewGallery"></div>
+                <div class="preview-socials" id="previewSocials"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ---- ЗВЁЗДЫ ----
+        (function() {
+            const c = document.getElementById('starsBg');
+            for (let i = 0; i < 100; i++) {
+                const s = document.createElement('div');
+                s.className = 'star-dot';
+                const size = Math.random() * 2 + 0.5;
+                s.style.cssText =
+                    `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--duration:${Math.random()*4+2}s;animation-delay:${Math.random()*5}s;opacity:${Math.random()*0.5+0.1};`;
+                c.appendChild(s);
+            }
+        })();
+
+        // ---- TOAST ----
+        function showToast(text, isError = false) {
+            const t = document.getElementById('toast');
+            t.textContent = text;
+            t.className = 'toast' + (isError ? ' error' : '');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // ---- ОСНОВНАЯ ЛОГИКА ----
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('formContent');
+
+            let bioData = {
+                username: '',
+                description: '',
+                role: '',
+                avatarType: 'emoji',
+                avatarEmoji: '🐱',
+                avatarData: null,
+                bgColor: '#0b0f2a',
+                bgImage: null,
+                bgStyle: 'default',
+                textColor: '#ffffff',
+                images: [],
+                links: {}
+            };
+
+            // ---- СПИСОК СОЦСЕТЕЙ ----
+            const socialKeys = ['discord', 'twitch', 'youtube', 'telegram', 'github', 'vk', 'tiktok', 'twitter', 'instagram', 'steam', 'flipple'];
+            const socialIcons = {
+                discord: 'fab fa-discord',
+                twitch: 'fab fa-twitch',
+                youtube: 'fab fa-youtube',
+                telegram: 'fab fa-telegram',
+                github: 'fab fa-github',
+                vk: 'fab fa-vk',
+                tiktok: 'fab fa-tiktok',
+                twitter: 'fab fa-twitter',
+                instagram: 'fab fa-instagram',
+                steam: 'fab fa-steam',
+                flipple: 'fas fa-rocket'
+            };
+            const socialLabels = {
+                discord: 'Discord',
+                twitch: 'Twitch',
+                youtube: 'YouTube',
+                telegram: 'Telegram',
+                github: 'GitHub',
+                vk: 'VK',
+                tiktok: 'TikTok',
+                twitter: 'Twitter',
+                instagram: 'Instagram',
+                steam: 'Steam',
+                flipple: 'Flipple Arcade'
+            };
+
+            // ---- ОБНОВЛЕНИЕ ПРЕДПРОСМОТРА ----
+            function updatePreview() {
+                // Аватарка
+                const avatarEl = document.getElementById('previewAvatar');
+                if (bioData.avatarType === 'emoji') {
+                    avatarEl.innerHTML = bioData.avatarEmoji || '🐱';
+                    avatarEl.style.fontSize = '2rem';
+                } else if (bioData.avatarData) {
+                    avatarEl.innerHTML = `<img src="${bioData.avatarData}" />`;
                 }
 
-                function updateImgPreview() {
-                    const container = document.getElementById('imgPreview');
-                    let html = '';
-                    for (let i = 0; i < bioData.images.length; i++) {
-                        const data = bioData.images[i];
-                        if (data) {
-                            html += `<div class="preview-thumb">
-                                <img src="${data}" />
-                                <button class="remove-img" data-num="${i}">×</button>
-                            </div>`;
-                        }
-                    }
-                    container.innerHTML = html;
-                    container.querySelectorAll('.remove-img').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const num = parseInt(this.dataset.num);
-                            bioData.images.splice(num, 1);
-                            document.getElementById(`img${num+1}File`).value = '';
-                            updatePreview();
-                            updateImgPreview();
-                        });
-                    });
+                // Ник, роль, описание
+                document.getElementById('previewName').textContent = bioData.username || 'Твой ник';
+                document.getElementById('previewName').style.color = bioData.textColor || '#ffffff';
+                document.getElementById('previewRole').textContent = bioData.role || 'Твоя роль';
+                document.getElementById('previewDesc').textContent = bioData.description || 'Твоё описание появится здесь';
+                document.getElementById('previewDesc').style.color = bioData.textColor || '#ffffff';
+
+                // Фон
+                const bg = document.getElementById('previewBg');
+                if (bioData.bgImage) {
+                    bg.style.background = `url(${bioData.bgImage}) center/cover no-repeat`;
+                } else if (bioData.bgStyle === 'galaxy') {
+                    bg.style.background = 'radial-gradient(circle at 30% 20%, #1a0a2e, #0b0f2a)';
+                } else if (bioData.bgStyle === 'sunset') {
+                    bg.style.background = 'radial-gradient(circle at 30% 20%, #2e0a1a, #1a0a0a)';
+                } else if (bioData.bgStyle === 'ocean') {
+                    bg.style.background = 'radial-gradient(circle at 30% 20%, #0a1a2e, #0a0a1a)';
+                } else if (bioData.bgStyle === 'forest') {
+                    bg.style.background = 'radial-gradient(circle at 30% 20%, #0a2e1a, #0a1a0a)';
+                } else {
+                    bg.style.background = bioData.bgColor || '#0b0f2a';
                 }
 
-                updatePreview();
-                updateImgPreview();
+                // Галерея картинок
+                const galleryEl = document.getElementById('previewGallery');
+                let galleryHTML = '';
+                for (const img of bioData.images) {
+                    if (img) {
+                        galleryHTML += `<div class="gallery-img"><img src="${img}" /></div>`;
+                    }
+                }
+                galleryEl.innerHTML = galleryHTML;
+
+                // Соцсети
+                const socialsEl = document.getElementById('previewSocials');
+                let socialHTML = '';
+                for (const [key, val] of Object.entries(bioData.links)) {
+                    if (val && val.trim()) {
+                        const icon = socialIcons[key] || 'fas fa-link';
+                        const label = socialLabels[key] || key;
+                        socialHTML +=
+                            `<a href="${val}" target="_blank" class="ps-btn"><i class="${icon}"></i> ${label}</a>`;
+                    }
+                }
+                socialsEl.innerHTML = socialHTML || '<span style="color:rgba(255,255,255,0.08);font-size:0.6rem;">Нет ссылок</span>';
             }
 
-            renderForm();
-        });
-    </script>
-</body>
-</html>
+            // ---- ГЕНЕРАЦИЯ ФОРМЫ ----
+            function renderForm() {
+                let socialFields = '';
+                for (const key of socialKeys) {
+                    const icon = socialIcons[key] || 'fas fa-link';
+                    const label = socialLabels[key] || key;
+                    const placeholder = key === 'flipple' ? 'https://flipplearcade.com/u/...' : `https://${key}.com/...`;
+                    socialFields += `
+                        <div class="link-block">
+                            <span class="platform-icon"><i class="${icon}"></i> ${label}</span>
+                            <input type="url" id="link_${key}" placeholder="${placeholder}" value="${bioData.links[key] || ''}" />
+                        </div>
+                    `;
+                }
+
+                form.innerHTML = `
+                    <div class="form-group">
+                        <label>📛 Ник *</label>
+                        <input type="text" id="bioUsername" placeholder="Твой ник" value="${bioData.username || ''}" />
+                    </div>
+                    <div class="form-group">
+                        <label>🖼️ Аватарка</label>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+                            <div class="file-input-wrapper">
+                                <div class="fake-btn"><i class="fas fa-upload"></i> Загрузить фото</div>
+                                <input type="file" id="avatarFile" accept="image/*" />
+                            </div>
+                            <select id="avatarEmoji" style="width:100%; padding:0.5rem 0.8rem; border-radius:12px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.05); color:#fff; font-size:1.2rem; outline:none;">
+                                <option value="🐱" ${bioData.avatarEmoji === '🐱' ? 'selected' : ''}>🐱 Кот</option>
+                                <option value="🚀" ${bioData.avatarEmoji === '🚀' ? 'selected' : ''}>🚀 Ракета</option>
+                                <option value="⭐" ${bioData.avatarEmoji === '⭐' ? 'selected' : ''}>⭐ Звезда</option>
+                                <option value="🌙" ${bioData.avatarEmoji === '🌙' ? 'selected' : ''}>🌙 Луна</option>
+                                <option value="🪐" ${bioData.avatarEmoji === '🪐' ? 'selected' : ''}>🪐 Сатурн</option>
+                                <option value="👾" ${bioData.avatarEmoji === '👾' ? 'selected' : ''}>👾 Инопланетянин</option>
+                                <option value="🤖" ${bioData.avatarEmoji === '🤖' ? 'selected' : ''}>🤖 Робот</option>
+                                <option value="🎮" ${bioData.avatarEmoji === '🎮' ? 'selected' : ''}>🎮 Геймер</option>
+                                <option value="🔥" ${bioData.avatarEmoji === '🔥' ? 'selected' : ''}>🔥 Огонь</option>
+                                <option value="💎" ${bioData.avatarEmoji === '💎' ? 'selected' : ''}>💎 Алмаз</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📝 Описание</label>
+                        <textarea id="bioDescription" rows="3" placeholder="Расскажи о себе...">${bioData.description || ''}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🏷️ Роль / статус</label>
+                        <input type="text" id="bioRole" placeholder="Например: Стример, Кодер..." value="${bioData.role || ''}" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>🌌 Фон</label>
+                        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                            <div class="file-input-wrapper" style="flex:2;">
+                                <div class="fake-btn"><i class="fas fa-image"></i> Загрузить фон</div>
+                                <input type="file" id="bgFile" accept="image/*" />
+                            </div>
+                            <span id="bgPreview" style="padding:0.4rem 0.8rem; background:rgba(255,255,255,0.02); border-radius:10px; font-size:0.7rem; color:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.03);">${bioData.bgImage ? '✅ Фон' : 'Нет'}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🎨 Или выбери цвет</label>
+                        <div class="color-options" id="colorOptions">
+                            <label class="color-btn ${bioData.bgColor === '#0b0f2a' ? 'active' : ''}" style="background:#0b0f2a;"><input type="radio" name="bgColor" value="#0b0f2a" ${bioData.bgColor === '#0b0f2a' ? 'checked' : ''} /></label>
+                            <label class="color-btn ${bioData.bgColor === '#1a0a2e' ? 'active' : ''}" style="background:#1a0a2e;"><input type="radio" name="bgColor" value="#1a0a2e" ${bioData.bgColor === '#1a0a2e' ? 'checked' : ''} /></label>
+                            <label class="color-btn ${bioData.bgColor === '#0a1a2e' ? 'active' : ''}" style="background:#0a1a2e;"><input type="radio" name="bgColor" value="#0a1a2e" ${bioData.bgColor === '#0a1a2e' ? 'checked' : ''} /></label>
+                            <label class="color-btn ${bioData.bgColor === '#2e0a1a' ? 'active' : ''}" style="background:#2e0a1a;"><input type="radio" name="bgColor" value="#2e0a1a" ${bioData.bgColor === '#2e0a1a' ? 'checked' : ''} /></label>
+                            <label class="color-btn ${bioData.bgColor === '#1a2e0a' ? 'active' : ''}" style="background:#1a2e0a;"><input type="radio" name="bgColor" value="#1a2e0a" ${bioData.bgColor === '#1a2e0a' ? 'checked' : ''} /></label>
+                            <label class="color-btn ${bioData.bgColor === '#2e1a0a' ? 'active' : ''}" style="background:#2e1a0a;"><input type="radio" name="bgColor" value="#2e1a0a" ${bioData.bgColor === '#2e1a0a' ? 'checked' : ''} /></label>
+                            <label class="color-btn ${bioData.bgColor === '#0a0a2e' ? 'active' : ''}" style="background:#0a0a2e;"><input type="radio" name="bgColor" value="#0a0a2e" ${bioData.bgColor === '#0a0a2e' ? 'checked' : ''} /></label>
+                            <label class="color-btn ${bioData.bgColor === '#1a0a0a' ? 'active' : ''}" style="background:#1a0a0a;"><input type="radio" name="bgColor" value="#1a0a0a" ${bioData.bgColor === '#1a0a0a' ? 'checked' : ''} /></label>
+                            <label class="color-btn ${bioData.bgColor === '#0a1a1a' ? 'active' : ''}" style="background:#0a1a1a;"><input type="radio" name="bgColor" value="#0a1a1a" ${bio
