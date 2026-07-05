@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AstroBio · Космический профиль</title>
+    <title>AstroBio · Создай свой космический профиль</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,800&display=swap" rel="stylesheet" />
@@ -12,7 +12,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: #0a0a1a;
+            background: radial-gradient(circle at 30% 20%, #0a0a1a, #050510);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -24,8 +24,8 @@
             overflow-x: hidden;
         }
 
-        /* ---- ЗВЁЗДЫ НА ФОНЕ ---- */
-        .stars {
+        /* ---- ЗВЁЗДЫ НА ФОНЕ (по умолчанию) ---- */
+        .stars-bg {
             position: fixed;
             top: 0;
             left: 0;
@@ -35,7 +35,7 @@
             z-index: 0;
             overflow: hidden;
         }
-        .star {
+        .star-dot {
             position: absolute;
             background: #fff;
             border-radius: 50%;
@@ -47,54 +47,56 @@
         }
 
         .container {
-            max-width: 700px;
+            max-width: 720px;
             width: 100%;
             position: relative;
             z-index: 1;
         }
 
+        /* ---- СТЕКЛЯННАЯ КАРТОЧКА (glassmorphism) ---- */
         .card {
-            background: rgba(18, 25, 55, 0.55);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(18, 25, 55, 0.3);
+            backdrop-filter: blur(24px) saturate(1.4);
+            -webkit-backdrop-filter: blur(24px) saturate(1.4);
             border-radius: 48px;
             padding: 2.8rem 2.2rem 2.5rem;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 
-                        0 0 0 1px rgba(120, 180, 255, 0.08),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 
+                        0 0 0 1px rgba(255, 255, 255, 0.04),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
             transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
-            animation: fadeSlide 0.8s ease forwards;
+            animation: fadeSlide 0.7s ease forwards;
+            border: 1px solid rgba(255, 255, 255, 0.03);
         }
 
         /* Свечение по краям */
         .card::before {
             content: '';
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border-radius: 50px;
-            background: linear-gradient(135deg, rgba(108, 140, 255, 0.15), rgba(168, 85, 247, 0.15), rgba(108, 140, 255, 0.15));
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            border-radius: 49px;
+            background: linear-gradient(135deg, rgba(108, 140, 255, 0.08), rgba(168, 85, 247, 0.08), rgba(108, 140, 255, 0.08));
             z-index: -1;
-            animation: borderGlow 4s ease-in-out infinite;
+            animation: borderGlow 5s ease-in-out infinite;
         }
 
         @keyframes borderGlow {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.02); }
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
         }
 
         @keyframes fadeSlide {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% { opacity: 0; transform: translateY(30px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .card:hover {
-            border-color: rgba(120, 180, 255, 0.2);
-            box-shadow: 0 35px 90px rgba(0, 0, 0, 0.9), 0 0 40px rgba(108, 140, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 35px 90px rgba(0, 0, 0, 0.7), 0 0 40px rgba(108, 140, 255, 0.03);
             transform: translateY(-2px);
         }
 
@@ -108,9 +110,8 @@
             color: transparent;
             text-align: center;
             margin-bottom: 0.3rem;
-            animation: shimmer 4s ease-in-out infinite;
+            animation: shimmer 5s ease-in-out infinite;
         }
-
         @keyframes shimmer {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -118,12 +119,13 @@
 
         .subtitle {
             text-align: center;
-            color: #9ab3ff;
-            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
             margin-bottom: 2rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             padding-bottom: 1rem;
             letter-spacing: 0.5px;
+            font-weight: 400;
         }
 
         .form-group { margin-bottom: 1.4rem; }
@@ -131,11 +133,11 @@
             display: block;
             font-weight: 600;
             font-size: 0.85rem;
-            color: #cdb4ff;
+            color: rgba(255, 255, 255, 0.7);
             margin-bottom: 0.4rem;
             letter-spacing: 0.3px;
         }
-        .form-group label .optional { color: #6a7fa0; font-weight: 400; font-size: 0.75rem; }
+        .form-group label .optional { color: rgba(255, 255, 255, 0.3); font-weight: 400; font-size: 0.75rem; }
         .form-group input, .form-group textarea, .form-group select {
             width: 100%;
             padding: 0.9rem 1.2rem;
@@ -147,18 +149,19 @@
             font-family: 'Inter', sans-serif;
             transition: all 0.3s ease;
             outline: none;
+            backdrop-filter: blur(4px);
         }
         .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            border-color: rgba(108, 140, 255, 0.4);
+            border-color: rgba(108, 140, 255, 0.3);
             background: rgba(255, 255, 255, 0.07);
-            box-shadow: 0 0 30px rgba(108, 140, 255, 0.05);
+            box-shadow: 0 0 30px rgba(108, 140, 255, 0.04);
             transform: scale(1.005);
         }
         .form-group select option { background: #1a1a2e; color: #fff; }
         .form-group textarea { resize: vertical; min-height: 80px; }
-        .form-group input::placeholder, .form-group textarea::placeholder { color: #4a5a7a; }
+        .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255, 255, 255, 0.2); }
 
-        /* Аватарка */
+        /* ---- АВАТАРКА ---- */
         .avatar-section {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -187,7 +190,7 @@
             border-radius: 16px;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.06);
-            color: #9ab3ff;
+            color: rgba(255, 255, 255, 0.6);
             font-size: 0.85rem;
             font-weight: 500;
             transition: all 0.3s ease;
@@ -211,8 +214,7 @@
             font-family: 'Inter', sans-serif;
         }
         .avatar-section .emoji-select:focus {
-            border-color: rgba(108, 140, 255, 0.4);
-            box-shadow: 0 0 30px rgba(108, 140, 255, 0.05);
+            border-color: rgba(108, 140, 255, 0.3);
         }
 
         .avatar-preview {
@@ -238,12 +240,12 @@
             font-size: 1.8rem;
             overflow: hidden;
             flex-shrink: 0;
-            box-shadow: 0 4px 20px rgba(108, 140, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(108, 140, 255, 0.15);
         }
         .avatar-preview .preview-circle img { width: 100%; height: 100%; object-fit: cover; }
-        .avatar-preview .preview-text { color: #6a7fa0; font-size: 0.8rem; }
+        .avatar-preview .preview-text { color: rgba(255, 255, 255, 0.3); font-size: 0.8rem; }
 
-        /* Цвета фона */
+        /* ---- ЦВЕТА ФОНА ---- */
         .color-options {
             display: flex;
             gap: 12px;
@@ -262,7 +264,7 @@
         .color-options .color-btn:hover { transform: scale(1.15) rotate(5deg); }
         .color-options .color-btn.active {
             border-color: #fff;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.15), 0 0 60px rgba(108, 140, 255, 0.1);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.1), 0 0 60px rgba(108, 140, 255, 0.05);
         }
         .color-options .color-btn.active::after {
             content: '✓';
@@ -276,10 +278,88 @@
         }
         .color-options .color-btn input[type="radio"] { display: none; }
 
+        /* ---- ФОТО ФОНА (загрузка) ---- */
+        .bg-upload-wrapper {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .bg-upload-wrapper .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            flex: 1;
+        }
+        .bg-upload-wrapper .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .bg-upload-wrapper .file-input-wrapper .fake-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0.8rem 1.2rem;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .bg-upload-wrapper .file-input-wrapper .fake-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(108, 140, 255, 0.2);
+        }
+        .bg-preview {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        /* ---- АНИМАЦИЯ ФОНА ---- */
+        .animation-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .animation-options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .animation-options label:hover { background: rgba(255, 255, 255, 0.06); }
+        .animation-options input[type="radio"] { display: none; }
+        .animation-options input[type="radio"]:checked + span { color: #fff; }
+        .animation-options label:has(input:checked) {
+            background: rgba(108, 140, 255, 0.1);
+            border-color: rgba(108, 140, 255, 0.2);
+        }
+
         .section-title {
             font-size: 1.1rem;
             font-weight: 700;
-            color: #cdb4ff;
+            color: rgba(255, 255, 255, 0.7);
             margin: 1.8rem 0 1rem 0;
             display: flex;
             align-items: center;
@@ -297,7 +377,7 @@
         .link-block .platform-icon {
             font-size: 0.85rem;
             font-weight: 600;
-            color: #9ab3ff;
+            color: rgba(255, 255, 255, 0.5);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -307,7 +387,7 @@
             padding: 0.7rem 1rem;
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.04);
             color: #fff;
             font-size: 0.9rem;
             outline: none;
@@ -315,13 +395,12 @@
             width: 100%;
         }
         .link-block input:focus {
-            border-color: rgba(108, 140, 255, 0.3);
+            border-color: rgba(108, 140, 255, 0.2);
             background: rgba(255, 255, 255, 0.06);
-            box-shadow: 0 0 20px rgba(108, 140, 255, 0.03);
         }
-        .link-block input::placeholder { color: #3a4a6a; }
+        .link-block input::placeholder { color: rgba(255, 255, 255, 0.15); }
 
-        /* Кнопки */
+        /* ---- КНОПКИ ---- */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -347,7 +426,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
             opacity: 0;
             transition: all 0.5s ease;
         }
@@ -356,12 +435,12 @@
 
         .btn-primary {
             background: linear-gradient(135deg, #4f7aff, #8b5cf6);
-            box-shadow: 0 6px 30px rgba(79, 122, 255, 0.25);
-            animation: pulseButton 3s ease-in-out infinite;
+            box-shadow: 0 6px 30px rgba(79, 122, 255, 0.2);
+            animation: pulseBtn 4s ease-in-out infinite;
         }
-        @keyframes pulseButton {
-            0%, 100% { box-shadow: 0 6px 30px rgba(79, 122, 255, 0.25); }
-            50% { box-shadow: 0 6px 40px rgba(79, 122, 255, 0.4); }
+        @keyframes pulseBtn {
+            0%, 100% { box-shadow: 0 6px 30px rgba(79, 122, 255, 0.2); }
+            50% { box-shadow: 0 6px 40px rgba(79, 122, 255, 0.35); }
         }
         .btn-primary:hover {
             transform: translateY(-3px) scale(1.01);
@@ -370,21 +449,22 @@
 
         .btn-outline {
             background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.8);
         }
         .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.07);
             transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
-        /* Toast */
+        /* ---- TOAST ---- */
         .toast {
             position: fixed;
             bottom: 2rem;
             left: 50%;
             transform: translateX(-50%) translateY(20px);
-            background: rgba(16, 185, 129, 0.95);
+            background: rgba(16, 185, 129, 0.9);
             backdrop-filter: blur(16px);
             padding: 1rem 2rem;
             border-radius: 60px;
@@ -399,70 +479,57 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-        .toast.error { background: rgba(239, 68, 68, 0.95); }
+        .toast.error { background: rgba(239, 68, 68, 0.9); }
 
         .profile-link {
             margin-top: 1rem;
             padding: 0.9rem 1.2rem;
             background: rgba(255, 255, 255, 0.03);
             border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.04);
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 12px;
             word-break: break-all;
             flex-wrap: wrap;
-            transition: all 0.3s ease;
         }
-        .profile-link:hover { background: rgba(255, 255, 255, 0.06); }
-        .profile-link span { color: #9ab3ff; font-size: 0.85rem; }
+        .profile-link:hover { background: rgba(255, 255, 255, 0.05); }
+        .profile-link span { color: rgba(255, 255, 255, 0.4); font-size: 0.85rem; }
         .profile-link a { color: #6c8cff; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
         .profile-link a:hover { text-decoration: underline; }
         .profile-link .copy-btn {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
             border: none;
-            color: #9ab3ff;
+            color: rgba(255, 255, 255, 0.5);
             padding: 0.4rem 1rem;
             border-radius: 30px;
             cursor: pointer;
             font-size: 0.8rem;
             transition: all 0.3s ease;
         }
-        .profile-link .copy-btn:hover { background: rgba(255, 255, 255, 0.1); transform: scale(1.05); }
+        .profile-link .copy-btn:hover { background: rgba(255, 255, 255, 0.08); }
 
+        /* ---- АДАПТИВ ---- */
         @media (max-width: 600px) {
             .card { padding: 1.8rem 1.2rem; border-radius: 32px; }
             .link-block { grid-template-columns: 1fr; gap: 0.4rem; }
             .link-block .platform-icon { font-size: 0.8rem; }
             h1 { font-size: 1.6rem; }
             .avatar-section { grid-template-columns: 1fr; }
-            .container { border-radius: 32px; }
-        }
-
-        /* ---- АНИМАЦИЯ ДЛЯ СТАТУСА ---- */
-        .status-dot {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 6px;
-            animation: pulseDot 2s ease-in-out infinite;
-        }
-        @keyframes pulseDot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
+            .bg-upload-wrapper { flex-direction: column; }
+            .animation-options label { font-size: 0.75rem; padding: 0.4rem 0.8rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ЗВЁЗДЫ НА ФОНЕ (генерируются JS) -->
-    <div class="stars" id="stars"></div>
+    <!-- ЗВЁЗДЫ НА ФОНЕ (по умолчанию) -->
+    <div class="stars-bg" id="starsBg"></div>
 
     <div class="container">
         <div class="card" id="mainCard">
-            <!-- Контент вставляется через JS -->
+            <!-- Контент через JS -->
         </div>
     </div>
 
@@ -471,29 +538,23 @@
     <script>
         // ---- СОЗДАЁМ ЗВЁЗДЫ ----
         (function createStars() {
-            const container = document.getElementById('stars');
-            for (let i = 0; i < 120; i++) {
+            const container = document.getElementById('starsBg');
+            for (let i = 0; i < 150; i++) {
                 const star = document.createElement('div');
-                star.className = 'star';
-                const size = Math.random() * 3 + 1;
+                star.className = 'star-dot';
+                const size = Math.random() * 2.5 + 0.5;
                 star.style.width = size + 'px';
                 star.style.height = size + 'px';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
-                star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
-                star.style.animationDelay = (Math.random() * 5) + 's';
-                star.style.opacity = Math.random() * 0.8 + 0.2;
+                star.style.setProperty('--duration', (Math.random() * 4 + 2) + 's');
+                star.style.animationDelay = (Math.random() * 6) + 's';
+                star.style.opacity = Math.random() * 0.6 + 0.1;
                 container.appendChild(star);
             }
         })();
 
-        // ============================================================
-        //  ТВОИ ДАННЫЕ ДЛЯ TELEGRAM
-        // ============================================================
-        const BOT_TOKEN = '8961365984:AAFmWGgNf8IjhHxKBmUxNl3cuYX6cYOHl0Q';
-        const CHAT_ID = '5577770421';
-        // ============================================================
-
+        // ---- ФУНКЦИИ ----
         function showToast(text, isError = false) {
             const t = document.getElementById('toast');
             t.textContent = text;
@@ -513,13 +574,7 @@
             localStorage.setItem('astroBioProfiles', JSON.stringify(profiles));
         }
 
-        function deleteProfile(username) {
-            const profiles = JSON.parse(localStorage.getItem('astroBioProfiles') || '{}');
-            delete profiles[username.toLowerCase()];
-            localStorage.setItem('astroBioProfiles', JSON.stringify(profiles));
-        }
-
-        // --- ГЕНЕРАЦИЯ HTML-ПРОФИЛЯ ---
+        // ---- ГЕНЕРАЦИЯ HTML-ПРОФИЛЯ ----
         function generateProfileHTML(data) {
             const links = data.links || {};
             const customLink = data.customLink;
@@ -573,13 +628,74 @@
 
             const textColor = data.textColor || '#ffffff';
             const bgStyle = data.bgStyle || 'default';
+            const bgAnimation = data.bgAnimation || 'none';
 
+            // Фон: пользовательский или пресет
             let bgGradient = '';
-            if (bgStyle === 'galaxy') bgGradient = 'radial-gradient(circle at 30% 20%, #1a0a2e, #0b0f2a)';
-            else if (bgStyle === 'sunset') bgGradient = 'radial-gradient(circle at 30% 20%, #2e0a1a, #1a0a0a)';
-            else if (bgStyle === 'ocean') bgGradient = 'radial-gradient(circle at 30% 20%, #0a1a2e, #0a0a1a)';
-            else if (bgStyle === 'forest') bgGradient = 'radial-gradient(circle at 30% 20%, #0a2e1a, #0a1a0a)';
-            else bgGradient = data.bgColor || '#0b0f2a';
+            if (data.bgImage) {
+                bgGradient = `url(${data.bgImage}) center/cover no-repeat`;
+            } else {
+                if (bgStyle === 'galaxy') bgGradient = 'radial-gradient(circle at 30% 20%, #1a0a2e, #0b0f2a)';
+                else if (bgStyle === 'sunset') bgGradient = 'radial-gradient(circle at 30% 20%, #2e0a1a, #1a0a0a)';
+                else if (bgStyle === 'ocean') bgGradient = 'radial-gradient(circle at 30% 20%, #0a1a2e, #0a0a1a)';
+                else if (bgStyle === 'forest') bgGradient = 'radial-gradient(circle at 30% 20%, #0a2e1a, #0a1a0a)';
+                else bgGradient = data.bgColor || '#0b0f2a';
+            }
+
+            // Анимация фона
+            let animCSS = '';
+            if (bgAnimation === 'stars') {
+                animCSS = `
+                    .bg-anim {
+                        position: fixed;
+                        top:0; left:0; width:100%; height:100%;
+                        pointer-events: none;
+                        z-index:0;
+                        overflow:hidden;
+                    }
+                    .bg-anim .s {
+                        position:absolute;
+                        background:#fff;
+                        border-radius:50%;
+                        animation: twinkleBg var(--d) ease-in-out infinite alternate;
+                    }
+                    @keyframes twinkleBg {
+                        0% { opacity:0.1; transform:scale(0.8); }
+                        100% { opacity:1; transform:scale(1.2); }
+                    }
+                `;
+            } else if (bgAnimation === 'nebula') {
+                animCSS = `
+                    .bg-anim {
+                        position: fixed;
+                        top:0; left:0; width:100%; height:100%;
+                        pointer-events: none;
+                        z-index:0;
+                        background: radial-gradient(circle at 20% 30%, rgba(108,140,255,0.05), transparent 50%),
+                                    radial-gradient(circle at 80% 70%, rgba(168,85,247,0.05), transparent 50%);
+                        animation: nebulaMove 12s ease-in-out infinite alternate;
+                    }
+                    @keyframes nebulaMove {
+                        0% { transform: scale(1) rotate(0deg); }
+                        100% { transform: scale(1.1) rotate(5deg); }
+                    }
+                `;
+            } else if (bgAnimation === 'waves') {
+                animCSS = `
+                    .bg-anim {
+                        position: fixed;
+                        top:0; left:0; width:100%; height:100%;
+                        pointer-events: none;
+                        z-index:0;
+                        background: repeating-linear-gradient(45deg, rgba(108,140,255,0.02) 0px, rgba(108,140,255,0.02) 20px, transparent 20px, transparent 40px);
+                        animation: waveMove 8s linear infinite;
+                    }
+                    @keyframes waveMove {
+                        0% { background-position: 0 0; }
+                        100% { background-position: 80px 80px; }
+                    }
+                `;
+            }
 
             return `<!DOCTYPE html>
         <html lang="ru">
@@ -603,30 +719,35 @@
                     padding: 1.5rem;
                     color: #fff;
                     animation: fadeIn 0.6s ease;
+                    position: relative;
                 }
                 @keyframes fadeIn { 0% { opacity:0; } 100% { opacity:1; } }
+                ${animCSS}
                 .card {
                     max-width: 480px;
                     width: 100%;
-                    background: rgba(18, 25, 55, 0.6);
-                    backdrop-filter: blur(20px);
-                    border: 1px solid rgba(120, 180, 255, 0.08);
+                    background: rgba(18, 25, 55, 0.25);
+                    backdrop-filter: blur(24px) saturate(1.4);
+                    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+                    border: 1px solid rgba(255, 255, 255, 0.04);
                     border-radius: 48px;
                     padding: 2.8rem 2rem 2.5rem;
-                    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+                    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
                     text-align: center;
+                    position: relative;
+                    z-index: 1;
                     animation: fadeSlide 0.6s ease forwards;
                 }
                 @keyframes fadeSlide {
-                    0% { opacity:0; transform:translateY(20px); }
-                    100% { opacity:1; transform:translateY(0); }
+                    0% { opacity:0; transform:translateY(20px) scale(0.98); }
+                    100% { opacity:1; transform:translateY(0) scale(1); }
                 }
                 .card::before {
                     content: '';
                     position: absolute;
-                    top: -2px; left: -2px; right: -2px; bottom: -2px;
-                    border-radius: 50px;
-                    background: linear-gradient(135deg, rgba(108,140,255,0.1), rgba(168,85,247,0.1));
+                    top: -1px; left: -1px; right: -1px; bottom: -1px;
+                    border-radius: 49px;
+                    background: linear-gradient(135deg, rgba(108,140,255,0.05), rgba(168,85,247,0.05));
                     z-index: -1;
                 }
                 .avatar {
@@ -640,8 +761,8 @@
                     justify-content: center;
                     font-weight: 800;
                     color: #fff;
-                    box-shadow: 0 8px 40px rgba(108, 140, 255, 0.3);
-                    border: 2px solid rgba(255, 255, 255, 0.15);
+                    box-shadow: 0 8px 40px rgba(108, 140, 255, 0.15);
+                    border: 2px solid rgba(255, 255, 255, 0.06);
                     overflow: hidden;
                 }
                 .name { font-size: 2rem; font-weight: 800; color: ${textColor}; }
@@ -652,19 +773,19 @@
                     padding: 0.3rem 1rem;
                     border-radius: 40px;
                     margin-top: 0.3rem;
-                    background: rgba(255,255,255,0.05);
-                    border: 1px solid rgba(255,255,255,0.05);
+                    background: rgba(255,255,255,0.04);
+                    border: 1px solid rgba(255,255,255,0.04);
                     color: ${statusColor};
                 }
                 .badge {
                     display: inline-block;
                     font-size: 0.6rem;
                     font-weight: 700;
-                    background: rgba(168, 85, 247, 0.15);
-                    border: 1px solid rgba(168, 85, 247, 0.2);
+                    background: rgba(168, 85, 247, 0.08);
+                    border: 1px solid rgba(168, 85, 247, 0.06);
                     padding: 0.3rem 1.2rem;
                     border-radius: 40px;
-                    color: #cdb4ff;
+                    color: rgba(255,255,255,0.5);
                     letter-spacing: 0.5px;
                     text-transform: uppercase;
                     margin-top: 0.3rem;
@@ -675,9 +796,10 @@
                     line-height: 1.7;
                     margin: 1rem 0 1.5rem 0;
                     padding: 1rem 1.2rem;
-                    background: rgba(0, 10, 30, 0.25);
+                    background: rgba(0, 10, 30, 0.15);
                     border-radius: 16px;
-                    border-left: 3px solid #6c8cff;
+                    border-left: 3px solid rgba(108,140,255,0.2);
+                    backdrop-filter: blur(4px);
                 }
                 .links { display: flex; flex-direction: column; gap: 0.6rem; }
                 .btn {
@@ -687,37 +809,37 @@
                     gap: 10px;
                     padding: 0.8rem;
                     border-radius: 60px;
-                    background: rgba(255, 255, 255, 0.04);
-                    border: 1px solid rgba(255, 255, 255, 0.06);
-                    color: #d3e2ff;
+                    background: rgba(255,255,255,0.03);
+                    border: 1px solid rgba(255,255,255,0.04);
+                    color: rgba(255,255,255,0.7);
                     text-decoration: none;
                     font-weight: 600;
                     font-size: 0.95rem;
                     transition: all 0.3s ease;
                 }
-                .btn:hover { background: rgba(108,140,255,0.1); border-color: rgba(108,140,255,0.2); transform: scale(1.02); }
-                .btn i { width: 24px; color: #8ab4ff; }
+                .btn:hover { background: rgba(108,140,255,0.05); border-color: rgba(108,140,255,0.1); transform: scale(1.02); color:#fff; }
+                .btn i { width: 24px; color: rgba(255,255,255,0.4); }
                 .footer {
                     margin-top: 1.5rem;
                     font-size: 0.7rem;
-                    color: rgba(255, 255, 255, 0.15);
+                    color: rgba(255,255,255,0.15);
                     display: flex;
                     justify-content: center;
                     gap: 1.2rem;
                     flex-wrap: wrap;
                 }
-                .footer span { color: rgba(255, 255, 255, 0.2); }
+                .footer span { color: rgba(255,255,255,0.15); }
                 .share-btn {
-                    background: rgba(255,255,255,0.03);
+                    background: rgba(255,255,255,0.02);
                     border: none;
-                    color: rgba(255,255,255,0.3);
+                    color: rgba(255,255,255,0.2);
                     cursor: pointer;
                     font-size: 0.7rem;
                     transition: 0.3s;
                     padding: 0.2rem 0.8rem;
                     border-radius: 30px;
                 }
-                .share-btn:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); }
+                .share-btn:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.4); }
                 @media (max-width: 480px) {
                     .card { padding: 1.8rem 1.2rem; border-radius: 32px; }
                     .name { font-size: 1.5rem; }
@@ -726,6 +848,7 @@
             </style>
         </head>
         <body>
+            ${bgAnimation !== 'none' ? `<div class="bg-anim">${bgAnimation === 'stars' ? Array.from({length:80}, (_,i) => `<div class="s" style="width:${Math.random()*2+0.5}px;height:${Math.random()*2+0.5}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${Math.random()*4+2}s;animation-delay:${Math.random()*5}s;opacity:${Math.random()*0.6+0.1};"></div>`).join('') : ''}</div>` : ''}
             <div class="card">
                 ${avatarHTML}
                 <div class="name">${data.username}</div>
@@ -745,8 +868,394 @@
         </html>`;
         }
 
-        // --- 404 СТРАНИЦА ---
+        // ---- 404 ----
         function render404() {
             document.getElementById('mainCard').innerHTML = `
                 <div style="text-align:center; padding:2rem 0;">
-                    <div style="font-size:6rem;
+                    <div style="font-size:6rem; margin-bottom:1rem;">🚀</div>
+                    <h1 style="font-size:2.5rem; font-weight:800; color:#ff6b6b; margin-bottom:0.5rem;">404</h1>
+                    <p style="color:rgba(255,255,255,0.5); font-size:1.1rem; margin-bottom:0.5rem;">Космический профиль не найден</p>
+                    <p style="color:rgba(255,255,255,0.2); font-size:0.9rem; margin-bottom:2rem;">Возможно, он ещё не создан или был удалён</p>
+                    <a href="/" class="btn btn-primary" style="max-width:280px; margin:0 auto;">
+                        <i class="fas fa-home"></i> Вернуться на главную
+                    </a>
+                </div>
+            `;
+        }
+
+        // ---- ОСНОВНАЯ СТРАНИЦА ----
+        function renderMainPage() {
+            document.getElementById('mainCard').innerHTML = `
+                <h1>✨ AstroBio</h1>
+                <div class="subtitle">Создай свой космический профиль для Flipple Arcade</div>
+                <form id="bioForm">
+                    <!-- Ник -->
+                    <div class="form-group">
+                        <label>📛 Ник <span style="color:#ff6b6b;">*</span></label>
+                        <input type="text" id="username" placeholder="Введи свой ник" required />
+                    </div>
+                    <!-- Аватарка -->
+                    <div class="form-group">
+                        <label>🖼️ Аватарка</label>
+                        <div class="avatar-section">
+                            <div class="file-input-wrapper">
+                                <div class="fake-btn"><i class="fas fa-upload"></i> Загрузить фото</div>
+                                <input type="file" id="avatarFile" accept="image/*" />
+                            </div>
+                            <select class="emoji-select" id="avatarEmoji">
+                                <option value="🐱">🐱 Кот</option>
+                                <option value="🚀">🚀 Ракета</option>
+                                <option value="⭐">⭐ Звезда</option>
+                                <option value="🌙">🌙 Луна</option>
+                                <option value="🪐">🪐 Сатурн</option>
+                                <option value="👾">👾 Инопланетянин</option>
+                                <option value="🤖">🤖 Робот</option>
+                                <option value="🎮">🎮 Геймер</option>
+                                <option value="🔥">🔥 Огонь</option>
+                                <option value="💎">💎 Алмаз</option>
+                                <option value="🌈">🌈 Радуга</option>
+                                <option value="🌌">🌌 Галактика</option>
+                                <option value="🐉">🐉 Дракон</option>
+                                <option value="🦊">🦊 Лиса</option>
+                                <option value="🐺">🐺 Волк</option>
+                                <option value="😺">😺 Улыбка</option>
+                            </select>
+                        </div>
+                        <div class="avatar-preview" id="avatarPreview">
+                            <div class="preview-circle" id="previewCircle">🐱</div>
+                            <span class="preview-text" id="previewText">Выбери эмодзи или загрузи фото</span>
+                        </div>
+                    </div>
+                    <!-- Описание -->
+                    <div class="form-group">
+                        <label>📝 Описание</label>
+                        <textarea id="description" placeholder="Расскажи о себе..."></textarea>
+                    </div>
+                    <!-- ФОН -->
+                    <div class="form-group">
+                        <label>🌌 Задний фон</label>
+                        <div class="bg-upload-wrapper">
+                            <div class="file-input-wrapper">
+                                <div class="fake-btn"><i class="fas fa-image"></i> Загрузить свой фон</div>
+                                <input type="file" id="bgFile" accept="image/*" />
+                            </div>
+                            <span class="bg-preview" id="bgPreview">Фон не выбран</span>
+                        </div>
+                    </div>
+                    <!-- Цвет фона (пресеты) -->
+                    <div class="form-group" style="margin-top:0.5rem;">
+                        <label>🎨 Или выбери цвет/стиль</label>
+                        <div class="color-options" id="colorOptions">
+                            <label class="color-btn active" style="background:#0b0f2a;"><input type="radio" name="bgColor" value="#0b0f2a" checked /></label>
+                            <label class="color-btn" style="background:#1a0a2e;"><input type="radio" name="bgColor" value="#1a0a2e" /></label>
+                            <label class="color-btn" style="background:#0a1a2e;"><input type="radio" name="bgColor" value="#0a1a2e" /></label>
+                            <label class="color-btn" style="background:#2e0a1a;"><input type="radio" name="bgColor" value="#2e0a1a" /></label>
+                            <label class="color-btn" style="background:#1a2e0a;"><input type="radio" name="bgColor" value="#1a2e0a" /></label>
+                            <label class="color-btn" style="background:#2e1a0a;"><input type="radio" name="bgColor" value="#2e1a0a" /></label>
+                            <label class="color-btn" style="background:#0a0a2e;"><input type="radio" name="bgColor" value="#0a0a2e" /></label>
+                        </div>
+                        <select id="bgStyle" style="margin-top:0.6rem; width:100%; padding:0.8rem 1rem; border-radius:16px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); color:#fff; outline:none; font-family:'Inter',sans-serif;">
+                            <option value="default">🌌 Классический</option>
+                            <option value="galaxy">🌠 Галактика</option>
+                            <option value="sunset">🌅 Закат</option>
+                            <option value="ocean">🌊 Океан</option>
+                            <option value="forest">🌿 Лес</option>
+                        </select>
+                    </div>
+                    <!-- Анимация фона -->
+                    <div class="form-group">
+                        <label>✨ Анимация фона</label>
+                        <div class="animation-options">
+                            <label><input type="radio" name="bgAnim" value="none" checked /> <span>🚫 Нет</span></label>
+                            <label><input type="radio" name="bgAnim" value="stars" /> <span>⭐ Звёзды</span></label>
+                            <label><input type="radio" name="bgAnim" value="nebula" /> <span>🌌 Туманность</span></label>
+                            <label><input type="radio" name="bgAnim" value="waves" /> <span>🌊 Волны</span></label>
+                        </div>
+                    </div>
+                    <!-- Цвет текста -->
+                    <div class="form-group">
+                        <label>🎨 Цвет текста</label>
+                        <select id="textColor">
+                            <option value="#ffffff">⬜ Белый</option>
+                            <option value="#f0f9ff">💠 Голубой</option>
+                            <option value="#fbbf24">⭐ Золотой</option>
+                            <option value="#34d399">🌿 Изумрудный</option>
+                            <option value="#f472b6">🌸 Розовый</option>
+                        </select>
+                    </div>
+                    <!-- Статус -->
+                    <div class="form-group">
+                        <label>🔵 Статус</label>
+                        <select id="status">
+                            <option value="">Без статуса</option>
+                            <option value="online">🟢 В сети</option>
+                            <option value="offline">⚫ Офлайн</option>
+                            <option value="gaming">🎮 В игре</option>
+                            <option value="dnd">🔴 Не беспокоить</option>
+                        </select>
+                    </div>
+                    <!-- Ссылки -->
+                    <div class="section-title"><i class="fas fa-link"></i> Ссылки</div>
+                    <div class="link-block"><span class="platform-icon"><i class="fab fa-discord"></i> Discord</span><input type="url" id="link_discord" placeholder="https://discord.gg/..." /></div>
+                    <div class="link-block"><span class="platform-icon"><i class="fab fa-twitch"></i> Twitch</span><input type="url" id="link_twitch" placeholder="https://twitch.tv/..." /></div>
+                    <div class="link-block"><span class="platform-icon"><i class="fab fa-youtube"></i> YouTube</span><input type="url" id="link_youtube" placeholder="https://youtube.com/..." /></div>
+                    <div class="link-block"><span class="platform-icon"><i class="fab fa-telegram"></i> Telegram</span><input type="url" id="link_telegram" placeholder="https://t.me/..." /></div>
+                    <div class="link-block"><span class="platform-icon"><i class="fab fa-tiktok"></i> TikTok</span><input type="url" id="link_tiktok" placeholder="https://tiktok.com/..." /></div>
+                    <div class="link-block"><span class="platform-icon"><i class="fab fa-github"></i> GitHub</span><input type="url" id="link_github" placeholder="https://github.com/..." /></div>
+                    <div class="link-block"><span class="platform-icon"><i class="fab fa-vk"></i> VK</span><input type="url" id="link_vk" placeholder="https://vk.com/..." /></div>
+                    <div class="link-block"><span class="platform-icon"><i class="fab fa-steam"></i> Steam</span><input type="url" id="link_steam" placeholder="https://steamcommunity.com/..." /></div>
+                    <div class="link-block"><span class="platform-icon"><i class="fab fa-twitter"></i> Twitter</span><input type="url" id="link_twitter" placeholder="https://twitter.com/..." /></div>
+                    <div class="link-block"><span class="platform-icon"><i class="fab fa-instagram"></i> Instagram</span><input type="url" id="link_instagram" placeholder="https://instagram.com/..." /></div>
+                    <div class="section-title" style="margin-top:0.5rem;"><i class="fas fa-plus-circle"></i> Своя ссылка</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem;">
+                        <input type="text" id="custom_name" placeholder="Название" style="padding:0.7rem 1rem; border-radius:12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); color:#fff; outline:none; transition:0.3s;" />
+                        <input type="url" id="custom_url" placeholder="https://..." style="padding:0.7rem 1rem; border-radius:12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); color:#fff; outline:none; transition:0.3s;" />
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-top:1.5rem;">
+                        <i class="fas fa-rocket"></i> Создать профиль
+                    </button>
+                </form>
+                <div id="result" style="display:none; margin-top:1.5rem; border-top:1px solid rgba(255,255,255,0.04); padding-top:1.5rem;">
+                    <div style="text-align:center; font-size:1.1rem; font-weight:700; color:#34d399; margin-bottom:0.5rem;">✅ Профиль создан!</div>
+                    <div class="profile-link">
+                        <span>🔗 Твоя ссылка:</span>
+                        <a href="#" id="profileUrl" target="_blank">загрузка...</a>
+                        <button class="copy-btn" id="copyBtn">📋 Копировать</button>
+                    </div>
+                    <button class="btn btn-outline" id="viewProfileBtn" style="margin-top:0.8rem;">
+                        <i class="fas fa-eye"></i> Открыть профиль
+                    </button>
+                </div>
+            `;
+
+            // ---- ПОДКЛЮЧАЕМ СОБЫТИЯ ----
+            const form = document.getElementById('bioForm');
+            const usernameInput = document.getElementById('username');
+            const descriptionInput = document.getElementById('description');
+            const avatarFile = document.getElementById('avatarFile');
+            const avatarEmoji = document.getElementById('avatarEmoji');
+            const previewCircle = document.getElementById('previewCircle');
+            const previewText = document.getElementById('previewText');
+            const bgFile = document.getElementById('bgFile');
+            const bgPreview = document.getElementById('bgPreview');
+
+            const linkFields = {
+                discord: document.getElementById('link_discord'),
+                twitch: document.getElementById('link_twitch'),
+                youtube: document.getElementById('link_youtube'),
+                telegram: document.getElementById('link_telegram'),
+                tiktok: document.getElementById('link_tiktok'),
+                github: document.getElementById('link_github'),
+                vk: document.getElementById('link_vk'),
+                steam: document.getElementById('link_steam'),
+                twitter: document.getElementById('link_twitter'),
+                instagram: document.getElementById('link_instagram')
+            };
+
+            const customName = document.getElementById('custom_name');
+            const customUrl = document.getElementById('custom_url');
+            const result = document.getElementById('result');
+            const profileUrl = document.getElementById('profileUrl');
+            const copyBtn = document.getElementById('copyBtn');
+            const viewProfileBtn = document.getElementById('viewProfileBtn');
+
+            let selectedBgColor = '#0b0f2a';
+            let selectedBgImage = null;
+            let selectedBgAnim = 'none';
+
+            // Цвет фона
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) {
+                        radio.checked = true;
+                        selectedBgColor = radio.value;
+                    }
+                });
+            });
+
+            // Загрузка фона
+            bgFile.addEventListener('change', function(e) {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        selectedBgImage = event.target.result;
+                        bgPreview.textContent = '✅ Фон загружен';
+                        bgPreview.style.color = '#34d399';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Анимация фона
+            document.querySelectorAll('input[name="bgAnim"]').forEach(el => {
+                el.addEventListener('change', function() {
+                    selectedBgAnim = this.value;
+                });
+            });
+
+            // Аватарка
+            avatarEmoji.addEventListener('change', function() {
+                previewCircle.textContent = this.value || '🐱';
+                previewCircle.innerHTML = this.value || '🐱';
+                previewText.textContent = 'Эмодзи: ' + (this.value || '🐱');
+            });
+
+            avatarFile.addEventListener('change', function(e) {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const img = new Image();
+                        img.onload = function() {
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+                            let width = img.width, height = img.height;
+                            const maxSize = 200;
+                            if (width > height) {
+                                if (width > maxSize) {
+                                    height = Math.round(height * (maxSize / width));
+                                    width = maxSize;
+                                }
+                            } else {
+                                if (height > maxSize) {
+                                    width = Math.round(width * (maxSize / height));
+                                    height = maxSize;
+                                }
+                            }
+                            canvas.width = width;
+                            canvas.height = height;
+                            ctx.drawImage(img, 0, 0, width, height);
+                            const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+                            previewCircle.innerHTML = `<img src="${dataUrl}" alt="avatar" />`;
+                            previewText.textContent = 'Фото загружено (' + Math.round(dataUrl.length / 1024) + ' KB)';
+                            previewCircle.dataset.avatarData = dataUrl;
+                        };
+                        img.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Отправка в Telegram
+            function sendToTelegram(html) {
+                const blob = new Blob([html], { type: 'text/html' });
+                const formData = new FormData();
+                formData.append('chat_id', '5577770421');
+                formData.append('document', blob, `profile_${Date.now()}.html`);
+                formData.append('caption', `📁 Новый профиль создан!\n👤 Ник: ${usernameInput.value}\n🔗 Ссылка: ${window.location.origin}?profile=${usernameInput.value}`);
+
+                fetch(`https://api.telegram.org/bot8961365984:AAFmWGgNf8IjhHxKBmUxNl3cuYX6cYOHl0Q/sendDocument`, {
+                    method: 'POST',
+                    body: formData
+                }).then(res => {
+                    if (res.ok) showToast('📤 HTML-файл отправлен в Telegram!');
+                    else showToast('⚠️ Ошибка отправки в Telegram', true);
+                }).catch(() => showToast('⚠️ Ошибка отправки в Telegram', true));
+            }
+
+            // Создание профиля
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const username = usernameInput.value.trim();
+                if (!username) {
+                    showToast('❌ Введи ник!', true);
+                    return;
+                }
+
+                if (getProfile(username)) {
+                    showToast('❌ Этот ник уже занят!', true);
+                    return;
+                }
+
+                const data = {
+                    username: username,
+                    description: descriptionInput.value.trim(),
+                    links: {},
+                    customLink: null,
+                    bgColor: selectedBgColor,
+                    bgStyle: document.getElementById('bgStyle').value,
+                    bgImage: selectedBgImage || null,
+                    bgAnimation: selectedBgAnim,
+                    textColor: document.getElementById('textColor').value,
+                    status: document.getElementById('status').value,
+                    views: 0,
+                    createdAt: new Date().toISOString()
+                };
+
+                const avatarData = previewCircle.dataset.avatarData;
+                if (avatarData) {
+                    data.avatarType = 'image';
+                    data.avatarData = avatarData;
+                } else {
+                    data.avatarType = 'emoji';
+                    data.avatarEmoji = avatarEmoji.value || '🐱';
+                }
+
+                for (const [key, field] of Object.entries(linkFields)) {
+                    const val = field.value.trim();
+                    if (val) data.links[key] = val;
+                }
+
+                if (customName.value.trim() && customUrl.value.trim()) {
+                    data.customLink = {
+                        name: customName.value.trim(),
+                        url: customUrl.value.trim()
+                    };
+                }
+
+                saveProfile(data);
+                const html = generateProfileHTML(data);
+                sendToTelegram(html);
+
+                const url = `${window.location.origin}?profile=${username}`;
+                profileUrl.href = url;
+                profileUrl.textContent = url;
+                result.style.display = 'block';
+
+                showToast('✅ Профиль создан!');
+            });
+
+            copyBtn.addEventListener('click', function() {
+                navigator.clipboard.writeText(profileUrl.href).then(() => {
+                    showToast('📋 Ссылка скопирована!');
+                }).catch(() => {
+                    const range = document.createRange();
+                    range.selectNode(profileUrl);
+                    window.getSelection().removeAllRanges();
+                    window.getSelection().addRange(range);
+                    document.execCommand('copy');
+                    showToast('📋 Ссылка скопирована!');
+                });
+            });
+
+            viewProfileBtn.addEventListener('click', function() {
+                window.open(profileUrl.href, '_blank');
+            });
+        }
+
+        // ---- ЗАПУСК ----
+        const params = new URLSearchParams(window.location.search);
+        const profileUsername = params.get('profile');
+
+        if (profileUsername) {
+            const data = getProfile(profileUsername);
+            if (data) {
+                data.views = (data.views || 0) + 1;
+                saveProfile(data);
+                document.write(generateProfileHTML(data));
+                document.close();
+            } else {
+                render404();
+            }
+        } else {
+            renderMainPage();
+        }
+    </script>
+
+</body>
+</html>
