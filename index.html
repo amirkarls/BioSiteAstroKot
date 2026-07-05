@@ -49,32 +49,35 @@
 
         /* ---- ПРЕДУПРЕЖДЕНИЕ ---- */
         .warning-banner {
-            background: rgba(255, 50, 50, 0.1);
-            border: 1px solid rgba(255, 50, 50, 0.2);
+            background: rgba(255, 50, 50, 0.08);
+            border: 1px solid rgba(255, 50, 50, 0.15);
             border-radius: 16px;
             padding: 0.8rem 1.2rem;
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 12px;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             animation: pulseWarning 2.5s infinite;
         }
         .warning-banner i { color: #ff4444; font-size: 1.1rem; flex-shrink: 0; }
         .warning-banner span { color: #ff8888; font-size: 0.85rem; font-weight: 500; line-height: 1.4; }
         @keyframes pulseWarning {
-            0%, 100% { border-color: rgba(255, 50, 50, 0.2); }
-            50% { border-color: rgba(255, 50, 50, 0.5); }
+            0%, 100% { border-color: rgba(255, 50, 50, 0.15); }
+            50% { border-color: rgba(255, 50, 50, 0.4); }
         }
 
+        /* ---- КАРТОЧКА (стеклянная, прозрачная) ---- */
         .card {
-            background: rgba(18, 25, 55, 0.25);
-            backdrop-filter: blur(24px) saturate(1.4);
-            -webkit-backdrop-filter: blur(24px) saturate(1.4);
+            background: rgba(18, 25, 55, 0.12);
+            backdrop-filter: blur(16px) saturate(1.2);
+            -webkit-backdrop-filter: blur(16px) saturate(1.2);
             border-radius: 32px;
             padding: 2.5rem 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+            transition: 0.3s;
         }
 
         h1 {
@@ -89,7 +92,7 @@
         }
         .sub {
             text-align: center;
-            color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.25);
             font-size: 0.85rem;
             margin-bottom: 1.5rem;
         }
@@ -99,7 +102,7 @@
             display: block;
             font-weight: 600;
             font-size: 0.78rem;
-            color: rgba(255,255,255,0.4);
+            color: rgba(255,255,255,0.35);
             margin-bottom: 0.3rem;
             text-transform: uppercase;
             letter-spacing: 0.3px;
@@ -109,16 +112,17 @@
             padding: 0.8rem 1rem;
             border-radius: 14px;
             background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.05);
             color: #fff;
             font-size: 0.95rem;
             font-family: 'Inter', sans-serif;
             transition: all 0.3s ease;
             outline: none;
+            backdrop-filter: blur(4px);
         }
         .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            border-color: rgba(108,140,255,0.25);
-            background: rgba(255,255,255,0.07);
+            border-color: rgba(108,140,255,0.2);
+            background: rgba(255,255,255,0.06);
         }
         .form-group textarea { resize: vertical; min-height: 60px; }
 
@@ -145,15 +149,16 @@
             padding: 0.7rem 1rem;
             border-radius: 14px;
             background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.06);
-            color: rgba(255,255,255,0.4);
+            border: 1px solid rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.35);
             font-size: 0.8rem;
             font-weight: 500;
             transition: all 0.3s ease;
             cursor: pointer;
+            backdrop-filter: blur(4px);
         }
         .file-input-wrapper .fake-btn:hover {
-            background: rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.07);
         }
         .file-preview {
             margin-top: 0.3rem;
@@ -166,7 +171,7 @@
             height: 60px;
             border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.04);
         }
         .file-preview .preview-thumb img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -188,7 +193,7 @@
         .color-options .color-btn:hover { transform: scale(1.1); }
         .color-options .color-btn.active {
             border-color: #fff;
-            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+            box-shadow: 0 0 20px rgba(255,255,255,0.08);
         }
         .color-options .color-btn.active::after {
             content: '✓';
@@ -212,7 +217,7 @@
         .link-block .platform-icon {
             font-size: 0.75rem;
             font-weight: 600;
-            color: rgba(255,255,255,0.4);
+            color: rgba(255,255,255,0.35);
             display: flex;
             align-items: center;
             gap: 6px;
@@ -228,13 +233,15 @@
             outline: none;
             transition: all 0.3s ease;
             width: 100%;
+            backdrop-filter: blur(4px);
         }
         .link-block input:focus {
-            border-color: rgba(108,140,255,0.2);
-            background: rgba(255,255,255,0.06);
+            border-color: rgba(108,140,255,0.15);
+            background: rgba(255,255,255,0.05);
         }
-        .link-block input::placeholder { color: rgba(255,255,255,0.12); }
+        .link-block input::placeholder { color: rgba(255,255,255,0.1); }
 
+        /* ---- КНОПКИ (прозрачные) ---- */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -249,55 +256,66 @@
             transition: all 0.3s ease;
             color: #fff;
             width: 100%;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
         .btn:active { transform: scale(0.97); }
         .btn-primary {
-            background: linear-gradient(135deg, #4f7aff, #8b5cf6);
-            box-shadow: 0 4px 25px rgba(79,122,255,0.2);
+            background: rgba(79, 122, 255, 0.15);
+            border: 1px solid rgba(79, 122, 255, 0.15);
+            box-shadow: 0 4px 25px rgba(79,122,255,0.05);
         }
         .btn-primary:hover {
+            background: rgba(79, 122, 255, 0.25);
+            border-color: rgba(79, 122, 255, 0.25);
             transform: translateY(-2px);
-            box-shadow: 0 8px 35px rgba(79,122,255,0.35);
+            box-shadow: 0 8px 35px rgba(79,122,255,0.1);
         }
         .btn-danger {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            box-shadow: 0 4px 25px rgba(239,68,68,0.2);
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.12);
+            box-shadow: 0 4px 25px rgba(239,68,68,0.05);
         }
         .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.2);
             transform: translateY(-2px);
-            box-shadow: 0 8px 35px rgba(239,68,68,0.35);
+            box-shadow: 0 8px 35px rgba(239,68,68,0.1);
         }
         .btn-outline {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.06);
-            color: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.04);
+            color: rgba(255,255,255,0.4);
         }
-        .btn-outline:hover { background: rgba(255,255,255,0.07); }
+        .btn-outline:hover { background: rgba(255,255,255,0.06); }
         .btn-success {
-            background: linear-gradient(135deg, #10b981, #34d399);
-            box-shadow: 0 4px 25px rgba(16,185,129,0.2);
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.12);
+            box-shadow: 0 4px 25px rgba(16,185,129,0.05);
         }
         .btn-success:hover {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.2);
             transform: translateY(-2px);
-            box-shadow: 0 8px 35px rgba(16,185,129,0.35);
+            box-shadow: 0 8px 35px rgba(16,185,129,0.1);
         }
 
         .switch-link {
             text-align: center;
             margin-top: 1rem;
             font-size: 0.85rem;
-            color: rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.15);
             cursor: pointer;
             transition: 0.3s;
         }
         .switch-link span { color: #6c8cff; }
-        .switch-link:hover { color: rgba(255,255,255,0.4); }
+        .switch-link:hover { color: rgba(255,255,255,0.3); }
 
         .tabs {
             display: flex;
             gap: 0.5rem;
             margin-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
             padding-bottom: 0.5rem;
         }
         .tabs .tab {
@@ -307,16 +325,17 @@
             font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
-            color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.2);
             background: rgba(255,255,255,0.02);
             border: 1px solid transparent;
+            backdrop-filter: blur(4px);
         }
         .tabs .tab.active {
             color: #fff;
-            background: rgba(108,140,255,0.08);
-            border-color: rgba(108,140,255,0.1);
+            background: rgba(108,140,255,0.06);
+            border-color: rgba(108,140,255,0.06);
         }
-        .tabs .tab:hover { color: rgba(255,255,255,0.6); }
+        .tabs .tab:hover { color: rgba(255,255,255,0.4); }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
@@ -327,34 +346,36 @@
             align-items: center;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
         }
         .profile-header h2 {
             font-size: 1.1rem;
             font-weight: 700;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.6);
         }
         .profile-header .user-badge {
             font-size: 0.65rem;
-            background: rgba(168,85,247,0.15);
-            border: 1px solid rgba(168,85,247,0.1);
+            background: rgba(168,85,247,0.08);
+            border: 1px solid rgba(168,85,247,0.06);
             padding: 0.2rem 0.8rem;
             border-radius: 40px;
             color: #cdb4ff;
+            backdrop-filter: blur(4px);
         }
         .profile-header .logout-btn {
-            background: rgba(255,255,255,0.05);
-            border: none;
-            color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.04);
+            color: rgba(255,255,255,0.25);
             padding: 0.3rem 0.8rem;
             border-radius: 20px;
             cursor: pointer;
             font-size: 0.7rem;
             transition: 0.3s;
+            backdrop-filter: blur(4px);
         }
         .profile-header .logout-btn:hover {
-            background: rgba(255,255,255,0.08);
-            color: rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.4);
         }
 
         .bio-list {
@@ -366,19 +387,20 @@
         }
         .bio-list::-webkit-scrollbar { width: 4px; }
         .bio-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); border-radius: 10px; }
-        .bio-list::-webkit-scrollbar-thumb { background: rgba(108,140,255,0.15); border-radius: 10px; }
+        .bio-list::-webkit-scrollbar-thumb { background: rgba(108,140,255,0.08); border-radius: 10px; }
 
         .bio-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0.8rem 1rem;
-            background: rgba(255,255,255,0.03);
+            background: rgba(255,255,255,0.02);
             border-radius: 14px;
-            border: 1px solid rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.03);
             transition: 0.3s;
+            backdrop-filter: blur(4px);
         }
-        .bio-item:hover { background: rgba(255,255,255,0.05); }
+        .bio-item:hover { background: rgba(255,255,255,0.04); }
         .bio-item .info {
             display: flex;
             align-items: center;
@@ -402,23 +424,23 @@
         .bio-item .info .name {
             font-weight: 600;
             font-size: 0.9rem;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.6);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .bio-item .info .meta {
             font-size: 0.65rem;
-            color: rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.15);
             white-space: nowrap;
         }
         .bio-item .info .owner-badge {
             font-size: 0.5rem;
-            background: rgba(255,215,0,0.1);
-            border: 1px solid rgba(255,215,0,0.1);
+            background: rgba(255,215,0,0.06);
+            border: 1px solid rgba(255,215,0,0.06);
             padding: 0.1rem 0.5rem;
             border-radius: 30px;
-            color: rgba(255,215,0,0.5);
+            color: rgba(255,215,0,0.4);
             text-transform: uppercase;
         }
         .bio-item .actions {
@@ -427,8 +449,8 @@
             flex-shrink: 0;
         }
         .bio-item .del-btn {
-            background: rgba(239,68,68,0.1);
-            border: none;
+            background: rgba(239,68,68,0.08);
+            border: 1px solid rgba(239,68,68,0.06);
             color: #ef4444;
             padding: 0.3rem 0.8rem;
             border-radius: 20px;
@@ -437,12 +459,11 @@
             transition: 0.3s;
         }
         .bio-item .del-btn:hover {
-            background: rgba(239,68,68,0.2);
-            transform: scale(1.05);
+            background: rgba(239,68,68,0.15);
         }
         .bio-item .view-btn {
-            background: rgba(108,140,255,0.1);
-            border: none;
+            background: rgba(108,140,255,0.06);
+            border: 1px solid rgba(108,140,255,0.06);
             color: #6c8cff;
             padding: 0.3rem 0.8rem;
             border-radius: 20px;
@@ -452,23 +473,22 @@
             text-decoration: none;
         }
         .bio-item .view-btn:hover {
-            background: rgba(108,140,255,0.2);
-            transform: scale(1.05);
+            background: rgba(108,140,255,0.1);
         }
 
         .empty-state {
             text-align: center;
             padding: 2rem 0;
-            color: rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.15);
         }
-        .empty-state i { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; opacity: 0.3; }
+        .empty-state i { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; opacity: 0.2; }
 
         .toast {
             position: fixed;
             bottom: 2rem;
             left: 50%;
             transform: translateX(-50%) translateY(20px);
-            background: rgba(16,185,129,0.9);
+            background: rgba(16,185,129,0.8);
             backdrop-filter: blur(16px);
             padding: 0.8rem 1.8rem;
             border-radius: 40px;
@@ -483,12 +503,12 @@
             font-size: 0.9rem;
         }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-        .toast.error { background: rgba(239,68,68,0.9); }
+        .toast.error { background: rgba(239,68,68,0.8); }
 
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.5);
             backdrop-filter: blur(8px);
             display: none;
             align-items: center;
@@ -497,18 +517,20 @@
         }
         .modal-overlay.show { display: flex; }
         .modal-box {
-            background: rgba(18,25,55,0.9);
+            background: rgba(18,25,55,0.3);
             backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border-radius: 24px;
             padding: 2rem;
             max-width: 400px;
             width: 90%;
-            border: 1px solid rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.03);
             text-align: center;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
         }
         .modal-box .icon { font-size: 3rem; margin-bottom: 0.5rem; }
         .modal-box h3 { font-size: 1.2rem; color: #ff6b6b; margin-bottom: 0.3rem; }
-        .modal-box p { color: rgba(255,255,255,0.4); font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .modal-box p { color: rgba(255,255,255,0.3); font-size: 0.9rem; margin-bottom: 1.5rem; }
         .modal-box .modal-actions {
             display: flex;
             gap: 0.8rem;
@@ -518,14 +540,15 @@
         .share-link-box {
             margin-top: 1rem;
             padding: 0.8rem 1rem;
-            background: rgba(255,255,255,0.03);
+            background: rgba(255,255,255,0.02);
             border-radius: 14px;
-            border: 1px solid rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.03);
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 8px;
             flex-wrap: wrap;
+            backdrop-filter: blur(4px);
         }
         .share-link-box .link {
             color: #6c8cff;
@@ -534,16 +557,17 @@
             flex: 1;
         }
         .share-link-box .copy-btn {
-            background: rgba(255,255,255,0.05);
-            border: none;
-            color: rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.04);
+            color: rgba(255,255,255,0.3);
             padding: 0.3rem 0.8rem;
             border-radius: 20px;
             cursor: pointer;
             font-size: 0.7rem;
             transition: 0.3s;
+            backdrop-filter: blur(4px);
         }
-        .share-link-box .copy-btn:hover { background: rgba(255,255,255,0.08); }
+        .share-link-box .copy-btn:hover { background: rgba(255,255,255,0.06); }
 
         @media (max-width: 480px) {
             .card { padding: 1.5rem 1.2rem; border-radius: 24px; }
@@ -777,7 +801,7 @@
                                 <div class="fake-btn"><i class="fas fa-upload"></i> Загрузить фото</div>
                                 <input type="file" id="avatarFile" accept="image/*" />
                             </div>
-                            <select id="avatarEmoji" style="width:100%; padding:0.7rem 1rem; border-radius:14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); color:#fff; font-size:1.2rem; outline:none;">
+                            <select id="avatarEmoji" style="width:100%; padding:0.7rem 1rem; border-radius:14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.05); color:#fff; font-size:1.2rem; outline:none; backdrop-filter:blur(4px);">
                                 <option value="🐱">🐱 Кот</option>
                                 <option value="🚀">🚀 Ракета</option>
                                 <option value="⭐">⭐ Звезда</option>
@@ -795,9 +819,9 @@
                                 <option value="🐺">🐺 Волк</option>
                             </select>
                         </div>
-                        <div class="avatar-preview" style="margin-top:0.5rem; display:flex; align-items:center; gap:12px; padding:0.5rem 1rem; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid rgba(255,255,255,0.04);">
+                        <div class="avatar-preview" style="margin-top:0.5rem; display:flex; align-items:center; gap:12px; padding:0.5rem 1rem; background:rgba(255,255,255,0.02); border-radius:12px; border:1px solid rgba(255,255,255,0.03); backdrop-filter:blur(4px);">
                             <div id="avatarPreviewCircle" style="width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#6c8cff,#a855f7); display:flex; align-items:center; justify-content:center; font-size:1.8rem; overflow:hidden; flex-shrink:0;">🐱</div>
-                            <span style="color:rgba(255,255,255,0.3); font-size:0.8rem;" id="avatarPreviewText">Выбери эмодзи или загрузи фото</span>
+                            <span style="color:rgba(255,255,255,0.25); font-size:0.8rem;" id="avatarPreviewText">Выбери эмодзи или загрузи фото</span>
                         </div>
                     </div>
 
@@ -818,7 +842,7 @@
                                 <div class="fake-btn"><i class="fas fa-image"></i> Загрузить фон</div>
                                 <input type="file" id="bgFile" accept="image/*" />
                             </div>
-                            <span id="bgPreview" style="padding:0.5rem 1rem; background:rgba(255,255,255,0.03); border-radius:12px; font-size:0.8rem; color:rgba(255,255,255,0.25); border:1px solid rgba(255,255,255,0.04);">Нет</span>
+                            <span id="bgPreview" style="padding:0.5rem 1rem; background:rgba(255,255,255,0.02); border-radius:12px; font-size:0.8rem; color:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.03); backdrop-filter:blur(4px);">Нет</span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -858,14 +882,18 @@
                     </div>
 
                     <!-- СОЦСЕТИ -->
-                    <div style="margin-top:1rem; border-top:1px solid rgba(255,255,255,0.04); padding-top:1rem;">
-                        <div style="font-size:0.75rem; font-weight:600; color:rgba(255,255,255,0.3); margin-bottom:0.5rem;">🔗 Соцсети (заполни нужные)</div>
+                    <div style="margin-top:1rem; border-top:1px solid rgba(255,255,255,0.03); padding-top:1rem;">
+                        <div style="font-size:0.75rem; font-weight:600; color:rgba(255,255,255,0.25); margin-bottom:0.5rem;">🔗 Соцсети (заполни нужные)</div>
                         <div class="link-block"><span class="platform-icon"><i class="fab fa-discord"></i> Discord</span><input type="url" id="link_discord" placeholder="https://discord.gg/..." /></div>
                         <div class="link-block"><span class="platform-icon"><i class="fab fa-twitch"></i> Twitch</span><input type="url" id="link_twitch" placeholder="https://twitch.tv/..." /></div>
                         <div class="link-block"><span class="platform-icon"><i class="fab fa-youtube"></i> YouTube</span><input type="url" id="link_youtube" placeholder="https://youtube.com/..." /></div>
                         <div class="link-block"><span class="platform-icon"><i class="fab fa-telegram"></i> Telegram</span><input type="url" id="link_telegram" placeholder="https://t.me/..." /></div>
                         <div class="link-block"><span class="platform-icon"><i class="fab fa-github"></i> GitHub</span><input type="url" id="link_github" placeholder="https://github.com/..." /></div>
                         <div class="link-block"><span class="platform-icon"><i class="fab fa-vk"></i> VK</span><input type="url" id="link_vk" placeholder="https://vk.com/..." /></div>
+                        <div class="link-block"><span class="platform-icon"><i class="fab fa-tiktok"></i> TikTok</span><input type="url" id="link_tiktok" placeholder="https://tiktok.com/..." /></div>
+                        <div class="link-block"><span class="platform-icon"><i class="fab fa-twitter"></i> Twitter</span><input type="url" id="link_twitter" placeholder="https://twitter.com/..." /></div>
+                        <div class="link-block"><span class="platform-icon"><i class="fab fa-instagram"></i> Instagram</span><input type="url" id="link_instagram" placeholder="https://instagram.com/..." /></div>
+                        <div class="link-block"><span class="platform-icon"><i class="fab fa-steam"></i> Steam</span><input type="url" id="link_steam" placeholder="https://steamcommunity.com/..." /></div>
                     </div>
 
                     <div class="form-group">
@@ -891,10 +919,10 @@
                 </form>
 
                 <!-- РЕЗУЛЬТАТ С ССЫЛКОЙ -->
-                <div id="resultBox" style="display:none; margin-top:1.5rem; border-top:1px solid rgba(255,255,255,0.04); padding-top:1.5rem;">
+                <div id="resultBox" style="display:none; margin-top:1.5rem; border-top:1px solid rgba(255,255,255,0.03); padding-top:1.5rem;">
                     <div style="text-align:center; font-weight:700; color:#34d399; margin-bottom:0.5rem;">✅ Био создано!</div>
                     <div class="share-link-box">
-                        <span style="color:rgba(255,255,255,0.3); font-size:0.8rem;">🔗 Твоя ссылка:</span>
+                        <span style="color:rgba(255,255,255,0.25); font-size:0.8rem;">🔗 Твоя ссылка:</span>
                         <span class="link" id="newBioLink">загрузка...</span>
                         <button class="copy-btn" id="copyNewBioLink">📋 Копировать</button>
                     </div>
@@ -973,7 +1001,7 @@
                         selectedBgColor = radio.value;
                         bgImageData = null;
                         document.getElementById('bgPreview').textContent = 'Нет';
-                        document.getElementById('bgPreview').style.color = 'rgba(255,255,255,0.25)';
+                        document.getElementById('bgPreview').style.color = 'rgba(255,255,255,0.2)';
                     }
                 });
             });
@@ -1052,7 +1080,8 @@
 
                 function saveBio() {
                     const links = {};
-                    ['discord', 'twitch', 'youtube', 'telegram', 'github', 'vk'].forEach(key => {
+                    ['discord', 'twitch', 'youtube', 'telegram', 'github', 'vk', 'tiktok', 'twitter', 'instagram', 'steam']
+                    .forEach(key => {
                         const val = document.getElementById(`link_${key}`).value.trim();
                         if (val) links[key] = val;
                     });
@@ -1124,7 +1153,7 @@
                         <div style="font-size:4rem;margin-bottom:1rem;">🚀</div>
                         <h1 style="font-size:2rem;color:#ff6b6b;">404</h1>
                         <p style="color:rgba(255,255,255,0.5);">Био не найдено</p>
-                        <a href="/" style="display:inline-block;margin-top:1rem;padding:0.6rem 1.5rem;border-radius:40px;background:linear-gradient(135deg,#4f7aff,#8b5cf6);color:#fff;text-decoration:none;">На главную</a>
+                        <a href="/" style="display:inline-block;margin-top:1rem;padding:0.6rem 1.5rem;border-radius:40px;background:rgba(79,122,255,0.15);border:1px solid rgba(79,122,255,0.15);color:#fff;text-decoration:none;backdrop-filter:blur(8px);">На главную</a>
                     </div>
                 `;
                 return;
@@ -1165,7 +1194,11 @@
                 youtube: 'fab fa-youtube',
                 telegram: 'fab fa-telegram',
                 github: 'fab fa-github',
-                vk: 'fab fa-vk'
+                vk: 'fab fa-vk',
+                tiktok: 'fab fa-tiktok',
+                twitter: 'fab fa-twitter',
+                instagram: 'fab fa-instagram',
+                steam: 'fab fa-steam'
             };
             const socialLabels = {
                 discord: 'Discord',
@@ -1173,7 +1206,11 @@
                 youtube: 'YouTube',
                 telegram: 'Telegram',
                 github: 'GitHub',
-                vk: 'VK'
+                vk: 'VK',
+                tiktok: 'TikTok',
+                twitter: 'Twitter',
+                instagram: 'Instagram',
+                steam: 'Steam'
             };
             if (data.links) {
                 for (const [key, val] of Object.entries(data.links)) {
@@ -1193,7 +1230,7 @@
                         ${bgStyle}
                         border-radius: 40px;
                         padding: 2rem 1.8rem;
-                        box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+                        box-shadow: 0 30px 80px rgba(0,0,0,0.3);
                         text-align: center;
                         min-height: 300px;
                         position: relative;
@@ -1208,24 +1245,24 @@
                         align-items: center;
                         justify-content: center;
                         font-size: 2.5rem;
-                        box-shadow: 0 8px 30px rgba(108,140,255,0.15);
-                        border: 2px solid rgba(255,255,255,0.06);
+                        box-shadow: 0 8px 30px rgba(108,140,255,0.08);
+                        border: 2px solid rgba(255,255,255,0.04);
                         overflow: hidden;
                     }
                     .bio-page .avatar img { width:100%; height:100%; object-fit:cover; }
                     .bio-page .name { font-size:1.6rem; font-weight:800; color:${data.textColor || '#ffffff'}; }
-                    .bio-page .role { font-size:0.6rem; font-weight:600; color:rgba(255,255,255,0.3); letter-spacing:0.5px; text-transform:uppercase; margin-top:0.2rem; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.04); padding:0.2rem 1rem; border-radius:40px; display:inline-block; }
-                    .bio-page .desc { color:${data.textColor || '#ffffff'}; font-size:0.9rem; line-height:1.6; margin:1rem 0 1.2rem; padding:0.8rem 1rem; background:rgba(0,10,30,0.15); border-radius:12px; border-left:2px solid rgba(108,140,255,0.15); opacity:0.85; }
+                    .bio-page .role { font-size:0.6rem; font-weight:600; color:rgba(255,255,255,0.25); letter-spacing:0.5px; text-transform:uppercase; margin-top:0.2rem; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.03); padding:0.2rem 1rem; border-radius:40px; display:inline-block; backdrop-filter:blur(4px); }
+                    .bio-page .desc { color:${data.textColor || '#ffffff'}; font-size:0.9rem; line-height:1.6; margin:1rem 0 1.2rem; padding:0.8rem 1rem; background:rgba(0,10,30,0.08); border-radius:12px; border-left:2px solid rgba(108,140,255,0.08); opacity:0.85; backdrop-filter:blur(4px); }
                     .bio-page .images { display:flex; gap:0.8rem; flex-wrap:wrap; justify-content:center; margin:1rem 0; }
-                    .bio-page .bio-image { max-width:200px; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,0.04); }
+                    .bio-page .bio-image { max-width:200px; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,0.03); }
                     .bio-page .bio-image img { width:100%; height:auto; display:block; }
                     .bio-page .socials { display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; margin:1rem 0; }
-                    .bio-page .social-btn { padding:0.4rem 1rem; border-radius:40px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.04); color:rgba(255,255,255,0.5); text-decoration:none; font-size:0.75rem; transition:0.3s; display:inline-flex; align-items:center; gap:6px; }
-                    .bio-page .social-btn:hover { background:rgba(255,255,255,0.08); color:#fff; }
-                    .bio-page .footer { font-size:0.65rem; color:rgba(255,255,255,0.15); margin-top:1rem; display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; }
-                    .bio-page .footer span { color:rgba(255,255,255,0.1); }
-                    .bio-page .back-btn { display:inline-block; margin-top:0.8rem; padding:0.4rem 1.2rem; border-radius:40px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.04); color:rgba(255,255,255,0.3); text-decoration:none; font-size:0.7rem; transition:0.3s; }
-                    .bio-page .back-btn:hover { background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.5); }
+                    .bio-page .social-btn { padding:0.4rem 1rem; border-radius:40px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.03); color:rgba(255,255,255,0.4); text-decoration:none; font-size:0.75rem; transition:0.3s; display:inline-flex; align-items:center; gap:6px; backdrop-filter:blur(4px); }
+                    .bio-page .social-btn:hover { background:rgba(255,255,255,0.06); color:#fff; }
+                    .bio-page .footer { font-size:0.65rem; color:rgba(255,255,255,0.1); margin-top:1rem; display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; }
+                    .bio-page .footer span { color:rgba(255,255,255,0.08); }
+                    .bio-page .back-btn { display:inline-block; margin-top:0.8rem; padding:0.4rem 1.2rem; border-radius:40px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.03); color:rgba(255,255,255,0.25); text-decoration:none; font-size:0.7rem; transition:0.3s; backdrop-filter:blur(4px); }
+                    .bio-page .back-btn:hover { background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.4); }
                     @media (max-width:480px) { .bio-page { padding:1.5rem 1.2rem; border-radius:32px; } }
                 </style>
                 <div class="bio-page">
@@ -1291,7 +1328,7 @@
                     </form>
                 </div>
 
-                <div class="switch-link" id="ownerHint" style="font-size:0.7rem; margin-top:1rem; color:rgba(255,255,255,0.1);">
+                <div class="switch-link" id="ownerHint" style="font-size:0.7rem; margin-top:1rem; color:rgba(255,255,255,0.08);">
                     Владелец: AstroKot_Owner
                 </div>
             `;
@@ -1396,7 +1433,7 @@
                                         <div class="meta">
                                             👁️ ${bio.views || 0} просмотров · ${new Date(bio.createdAt).toLocaleDateString()}
                                             ${isOwnerBio && bio.owner && bio.owner !== currentUser ? ` · <span class="owner-badge">👑 ${bio.owner}</span>` : ''}
-                                            ${isOwnBio ? ' · <span style="color:rgba(255,255,255,0.15);">твоё</span>' : ''}
+                                            ${isOwnBio ? ' · <span style="color:rgba(255,255,255,0.1);">твоё</span>' : ''}
                                         </div>
                                     </div>
                                 </div>
