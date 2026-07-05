@@ -562,7 +562,7 @@
             if (e.target === this) hideConfirmModal();
         });
 
-        // ---- ФОРМА СОЗДАНИЯ БИО (на этой же странице) ----
+        // ---- ФОРМА СОЗДАНИЯ БИО (без статуса) ----
         function renderCreateBioForm() {
             document.getElementById('mainCard').innerHTML = `
                 <div class="profile-header">
@@ -596,16 +596,6 @@
                             <option value="#f472b6">🌸 Розовый</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>🔵 Статус</label>
-                        <select id="newStatus">
-                            <option value="">Без статуса</option>
-                            <option value="online">🟢 В сети</option>
-                            <option value="offline">⚫ Офлайн</option>
-                            <option value="gaming">🎮 В игре</option>
-                            <option value="dnd">🔴 Не беспокоить</option>
-                        </select>
-                    </div>
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-rocket"></i> Создать био
                     </button>
@@ -632,7 +622,6 @@
                     description: document.getElementById('newDescription').value.trim(),
                     role: document.getElementById('newRole').value.trim() || 'Flipple Arcade',
                     textColor: document.getElementById('newTextColor').value,
-                    status: document.getElementById('newStatus').value,
                     owner: getCurrentUser(),
                     views: 0,
                     createdAt: new Date().toISOString(),
