@@ -84,7 +84,7 @@
             text-transform: uppercase;
             letter-spacing: 0.3px;
         }
-        .form-group input {
+        .form-group input, .form-group textarea, .form-group select {
             width: 100%;
             padding: 0.8rem 1rem;
             border-radius: 14px;
@@ -96,10 +96,11 @@
             transition: all 0.3s ease;
             outline: none;
         }
-        .form-group input:focus {
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
             border-color: rgba(108,140,255,0.25);
             background: rgba(255,255,255,0.07);
         }
+        .form-group textarea { resize: vertical; min-height: 60px; }
 
         .btn {
             display: inline-flex;
@@ -561,10 +562,95 @@
             if (e.target === this) hideConfirmModal();
         });
 
-        // ---- СТРАНИЦА СОЗДАНИЯ БИО ----
-        function renderCreateBio() {
-            // Перенаправляем на главную страницу с созданием био
-            window.location.href = '/';
+        // ---- ФОРМА СОЗДАНИЯ БИО (на этой же странице) ----
+        function renderCreateBioForm() {
+            document.getElementById('mainCard').innerHTML = `
+                <div class="profile-header">
+                    <div>
+                        <h2>✨ Создать новое био</h2>
+                        <div class="user-badge">${isOwner() ? '👑 Владелец' : '👤 ' + getCurrentUser()}</div>
+                    </div>
+                    <button class="logout-btn" id="backToDashboard"><i class="fas fa-arrow-left"></i> Назад</button>
+                </div>
+
+                <form id="createBioForm">
+                    <div class="form-group">
+                        <label>📛 Ник *</label>
+                        <input type="text" id="newUsername" placeholder="Введи ник" required />
+                    </div>
+                    <div class="form-group">
+                        <label>📝 Описание</label>
+                        <textarea id="newDescription" placeholder="Расскажи о себе..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>🏷️ Роль / статус</label>
+                        <input type="text" id="newRole" placeholder="Например: Стример, Кодер..." value="Flipple Arcade" />
+                    </div>
+                    <div class="form-group">
+                        <label>🎨 Цвет текста</label>
+                        <select id="newTextColor">
+                            <option value="#ffffff">⬜ Белый</option>
+                            <option value="#f0f9ff">💠 Голубой</option>
+                            <option value="#fbbf24">⭐ Золотой</option>
+                            <option value="#34d399">🌿 Изумрудный</option>
+                            <option value="#f472b6">🌸 Розовый</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>🔵 Статус</label>
+                        <select id="newStatus">
+                            <option value="">Без статуса</option>
+                            <option value="online">🟢 В сети</option>
+                            <option value="offline">⚫ Офлайн</option>
+                            <option value="gaming">🎮 В игре</option>
+                            <option value="dnd">🔴 Не беспокоить</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i> Создать био
+                    </button>
+                </form>
+            `;
+
+            // Обработка формы
+            document.getElementById('createBioForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('newUsername').value.trim();
+                if (!username) {
+                    showToast('❌ Введи ник!', true);
+                    return;
+                }
+
+                const profiles = getProfiles();
+                if (profiles[username.toLowerCase()]) {
+                    showToast('❌ Это био уже существует!', true);
+                    return;
+                }
+
+                const data = {
+                    username: username,
+                    description: document.getElementById('newDescription').value.trim(),
+                    role: document.getElementById('newRole').value.trim() || 'Flipple Arcade',
+                    textColor: document.getElementById('newTextColor').value,
+                    status: document.getElementById('newStatus').value,
+                    owner: getCurrentUser(),
+                    views: 0,
+                    createdAt: new Date().toISOString(),
+                    avatarType: 'emoji',
+                    avatarEmoji: '🐱'
+                };
+
+                profiles[username.toLowerCase()] = data;
+                saveProfiles(profiles);
+
+                showToast('✅ Био создано!');
+                sendTelegram(`📁 Новое био: ${username} (${getCurrentUser()})`);
+                renderDashboard();
+            });
+
+            document.getElementById('backToDashboard').addEventListener('click', function() {
+                renderDashboard();
+            });
         }
 
         // ---- РЕНДЕР СТРАНИЦ ----
@@ -752,9 +838,9 @@
                     ${listHTML}
                 </div>
                 <div style="margin-top:1.5rem; display:flex; gap:0.8rem; flex-wrap:wrap;">
-                    <a href="/" class="btn btn-primary" style="flex:1; text-decoration:none; text-align:center;">
+                    <button class="btn btn-primary" id="createBioBtn" style="flex:1; text-decoration:none; text-align:center;">
                         <i class="fas fa-plus"></i> Создать новое био
-                    </a>
+                    </button>
                     <button class="btn btn-outline" id="refreshBtn" style="flex:0 0 auto; width:auto; padding:0.8rem 1.2rem;">
                         <i class="fas fa-sync"></i>
                     </button>
@@ -779,44 +865,16 @@
                 showToast('🔄 Обновлено');
             });
 
-            // Кнопка "Создать новое био" теперь ведёт на главную, где есть форма создания
-            // Главная страница (/) уже содержит форму создания био
+            document.getElementById('createBioBtn').addEventListener('click', function() {
+                renderCreateBioForm();
+            });
         }
 
-        // ---- ОПРЕДЕЛЯЕМ СТРАНИЦУ ----
-        const path = window.location.pathname;
-
-        // Если мы на главной и залогинены — показываем форму создания био
-        if (path === '/' || path === '') {
-            if (isLoggedIn()) {
-                // Перенаправляем на страницу создания био (которая уже есть на главной)
-                // Но чтобы не было цикла, просто показываем форму
-                // Используем существующий index.html с формой
-                window.location.href = '/index.html';
-            } else {
-                renderLogin();
-            }
+        // ---- ЗАПУСК ----
+        if (isLoggedIn()) {
+            renderDashboard();
         } else {
-            // Иначе показываем дашборд
-            if (isLoggedIn()) {
-                renderDashboard();
-            } else {
-                renderLogin();
-            }
-        }
-
-        // ---- ЗАПУСК (если страница загружена с параметром profile) ----
-        const params = new URLSearchParams(window.location.search);
-        const profileName = params.get('profile');
-        if (profileName) {
-            // Показываем био
-            const profiles = getProfiles();
-            const data = profiles[profileName.toLowerCase()];
-            if (data) {
-                data.views = (data.views || 0) + 1;
-                saveProfiles(profiles);
-                // Здесь можно показать био, но это уже делает index.html
-            }
+            renderLogin();
         }
     </script>
 </body>
