@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AstroBio · Админка</title>
+    <title>AstroBio · Мои био</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,800&display=swap" rel="stylesheet" />
@@ -139,6 +139,14 @@
             color: rgba(255,255,255,0.5);
         }
         .btn-outline:hover { background: rgba(255,255,255,0.07); }
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #34d399);
+            box-shadow: 0 4px 25px rgba(16,185,129,0.2);
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 35px rgba(16,185,129,0.35);
+        }
 
         .switch-link {
             text-align: center;
@@ -151,8 +159,35 @@
         .switch-link span { color: #6c8cff; }
         .switch-link:hover { color: rgba(255,255,255,0.4); }
 
-        /* ---- АДМИНКА ---- */
-        .admin-header {
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            padding-bottom: 0.5rem;
+        }
+        .tabs .tab {
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.02);
+            border: 1px solid transparent;
+        }
+        .tabs .tab.active {
+            color: #fff;
+            background: rgba(108,140,255,0.08);
+            border-color: rgba(108,140,255,0.1);
+        }
+        .tabs .tab:hover { color: rgba(255,255,255,0.6); }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .profile-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -160,12 +195,12 @@
             padding-bottom: 1rem;
             border-bottom: 1px solid rgba(255,255,255,0.04);
         }
-        .admin-header h2 {
+        .profile-header h2 {
             font-size: 1.1rem;
             font-weight: 700;
             color: rgba(255,255,255,0.7);
         }
-        .admin-header .user-badge {
+        .profile-header .user-badge {
             font-size: 0.65rem;
             background: rgba(168,85,247,0.15);
             border: 1px solid rgba(168,85,247,0.1);
@@ -173,7 +208,7 @@
             border-radius: 40px;
             color: #cdb4ff;
         }
-        .admin-header .logout-btn {
+        .profile-header .logout-btn {
             background: rgba(255,255,255,0.05);
             border: none;
             color: rgba(255,255,255,0.3);
@@ -183,7 +218,7 @@
             font-size: 0.7rem;
             transition: 0.3s;
         }
-        .admin-header .logout-btn:hover {
+        .profile-header .logout-btn:hover {
             background: rgba(255,255,255,0.08);
             color: rgba(255,255,255,0.6);
         }
@@ -316,7 +351,6 @@
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
         .toast.error { background: rgba(239,68,68,0.9); }
 
-        /* ---- МОДАЛ ПОДТВЕРЖДЕНИЯ ---- */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -353,6 +387,7 @@
             .bio-item { flex-wrap: wrap; gap: 0.5rem; }
             .bio-item .info { width: 100%; }
             .bio-item .actions { width: 100%; justify-content: flex-end; }
+            .tabs .tab { font-size: 0.7rem; padding: 0.3rem 0.8rem; }
         }
     </style>
 </head>
@@ -412,7 +447,6 @@
             }
         };
 
-        // Обычные пользователи: любой ник, пароль 123456 (или можно задать свой при регистрации)
         const SESSION_KEY = 'astroBioSession';
 
         function getSession() {
@@ -445,14 +479,11 @@
         }
 
         function login(username, password) {
-            // Владелец
             if (USERS[username] && USERS[username].password === password) {
                 setSession(username);
                 return true;
             }
-            // Обычный пользователь (пароль 123456)
             if (password === '123456' && username && username.length > 0) {
-                // Сохраняем обычного пользователя в USERS, если его нет
                 if (!USERS[username]) {
                     USERS[username] = { password: '123456', role: 'user' };
                 }
@@ -460,6 +491,13 @@
                 return true;
             }
             return false;
+        }
+
+        function register(username, password) {
+            if (USERS[username]) return false;
+            USERS[username] = { password: password, role: 'user' };
+            setSession(username);
+            return true;
         }
 
         function logout() {
@@ -479,11 +517,6 @@
             const profiles = getProfiles();
             delete profiles[username.toLowerCase()];
             saveProfiles(profiles);
-        }
-
-        function getBioOwner(username) {
-            const profiles = getProfiles();
-            return profiles[username.toLowerCase()] || null;
         }
 
         // ---- ОТПРАВКА В TELEGRAM ----
@@ -521,7 +554,7 @@
                 hideConfirmModal();
                 showToast(`🗑️ Био "${username}" удалено!`);
                 sendTelegram(`🗑️ Удалено био: ${username} (${getCurrentUser()})`);
-                renderAdmin();
+                renderDashboard();
             }
         });
         document.getElementById('confirmModal').addEventListener('click', function(e) {
@@ -531,41 +564,111 @@
         // ---- РЕНДЕР СТРАНИЦ ----
         function renderLogin() {
             document.getElementById('mainCard').innerHTML = `
-                <h1>🔐 Вход в аккаунт</h1>
-                <div class="sub">Войди, чтобы управлять своими био</div>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label>👤 Логин</label>
-                        <input type="text" id="loginUsername" placeholder="Твой ник" />
-                    </div>
-                    <div class="form-group">
-                        <label>🔑 Пароль</label>
-                        <input type="password" id="loginPassword" placeholder="Введи пароль" />
-                        <div style="font-size:0.65rem;color:rgba(255,255,255,0.15);margin-top:0.3rem;">
-                            Владелец: AstroKot_Owner | Пароль: FlHwUoqp51k<br />
-                            Обычный: любой ник | Пароль: 123456
+                <h1>🌌 AstroBio</h1>
+                <div class="sub">Войди или создай аккаунт</div>
+
+                <div class="tabs">
+                    <div class="tab active" data-tab="login">Вход</div>
+                    <div class="tab" data-tab="register">Регистрация</div>
+                </div>
+
+                <div class="tab-content active" id="tab-login">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label>👤 Логин</label>
+                            <input type="text" id="loginUsername" placeholder="Твой ник" />
                         </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-sign-in-alt"></i> Войти
-                    </button>
-                </form>
+                        <div class="form-group">
+                            <label>🔑 Пароль</label>
+                            <input type="password" id="loginPassword" placeholder="Введи пароль" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt"></i> Войти
+                        </button>
+                    </form>
+                </div>
+
+                <div class="tab-content" id="tab-register">
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label>👤 Новый логин</label>
+                            <input type="text" id="registerUsername" placeholder="Придумай ник" />
+                        </div>
+                        <div class="form-group">
+                            <label>🔑 Пароль</label>
+                            <input type="password" id="registerPassword" placeholder="Придумай пароль" />
+                        </div>
+                        <div class="form-group">
+                            <label>🔑 Повтори пароль</label>
+                            <input type="password" id="registerPassword2" placeholder="Повтори пароль" />
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-user-plus"></i> Зарегистрироваться
+                        </button>
+                    </form>
+                </div>
+
+                <div class="switch-link" id="ownerHint" style="font-size:0.7rem; margin-top:1rem; color:rgba(255,255,255,0.1);">
+                    Владелец: AstroKot_Owner
+                </div>
             `;
 
+            // Переключение вкладок
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+                });
+            });
+
+            // Логин
             document.getElementById('loginForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const username = document.getElementById('loginUsername').value.trim();
                 const password = document.getElementById('loginPassword').value.trim();
                 if (login(username, password)) {
                     showToast('✅ Вход выполнен!');
-                    renderAdmin();
+                    renderDashboard();
                 } else {
                     showToast('❌ Неверный логин или пароль', true);
                 }
             });
+
+            // Регистрация
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('registerUsername').value.trim();
+                const password = document.getElementById('registerPassword').value.trim();
+                const password2 = document.getElementById('registerPassword2').value.trim();
+
+                if (!username || username.length < 2) {
+                    showToast('❌ Логин должен быть минимум 2 символа', true);
+                    return;
+                }
+                if (password.length < 4) {
+                    showToast('❌ Пароль должен быть минимум 4 символа', true);
+                    return;
+                }
+                if (password !== password2) {
+                    showToast('❌ Пароли не совпадают', true);
+                    return;
+                }
+                if (USERS[username]) {
+                    showToast('❌ Этот логин уже занят', true);
+                    return;
+                }
+                if (register(username, password)) {
+                    showToast('✅ Аккаунт создан! Вход выполнен.');
+                    renderDashboard();
+                } else {
+                    showToast('❌ Ошибка регистрации', true);
+                }
+            });
         }
 
-        function renderAdmin() {
+        function renderDashboard() {
             const profiles = getProfiles();
             const keys = Object.keys(profiles);
             const currentUser = getCurrentUser();
@@ -580,7 +683,6 @@
                     </div>
                 `;
             } else {
-                // Фильтруем: владелец видит всё, обычный пользователь — только свои
                 let filteredKeys = keys;
                 if (!isOwnerUser) {
                     filteredKeys = keys.filter(key => {
@@ -633,9 +735,9 @@
             }
 
             document.getElementById('mainCard').innerHTML = `
-                <div class="admin-header">
+                <div class="profile-header">
                     <div>
-                        <h2>🚀 Управление био</h2>
+                        <h2>🚀 Мои био</h2>
                         <div class="user-badge">${isOwnerUser ? '👑 Владелец' : '👤 ' + currentUser}</div>
                     </div>
                     <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Выйти</button>
@@ -653,7 +755,6 @@
                 </div>
             `;
 
-            // Удаление с подтверждением
             document.querySelectorAll('.del-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const username = this.dataset.username;
@@ -668,14 +769,14 @@
             });
 
             document.getElementById('refreshBtn').addEventListener('click', function() {
-                renderAdmin();
+                renderDashboard();
                 showToast('🔄 Обновлено');
             });
         }
 
         // ---- ЗАПУСК ----
         if (isLoggedIn()) {
-            renderAdmin();
+            renderDashboard();
         } else {
             renderLogin();
         }
