@@ -47,6 +47,26 @@
             z-index: 1;
         }
 
+        /* ---- ПРЕДУПРЕЖДЕНИЕ ---- */
+        .warning-banner {
+            background: rgba(255, 50, 50, 0.1);
+            border: 1px solid rgba(255, 50, 50, 0.2);
+            border-radius: 16px;
+            padding: 0.8rem 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(8px);
+            animation: pulseWarning 2.5s infinite;
+        }
+        .warning-banner i { color: #ff4444; font-size: 1.1rem; flex-shrink: 0; }
+        .warning-banner span { color: #ff8888; font-size: 0.85rem; font-weight: 500; line-height: 1.4; }
+        @keyframes pulseWarning {
+            0%, 100% { border-color: rgba(255, 50, 50, 0.2); }
+            50% { border-color: rgba(255, 50, 50, 0.5); }
+        }
+
         .card {
             background: rgba(18, 25, 55, 0.25);
             backdrop-filter: blur(24px) saturate(1.4);
@@ -181,6 +201,39 @@
             text-shadow: 0 0 10px rgba(0,0,0,0.9);
         }
         .color-options .color-btn input[type="radio"] { display: none; }
+
+        .link-block {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            align-items: center;
+        }
+        .link-block .platform-icon {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.4);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .link-block .platform-icon i { width: 18px; color: #a855f7; font-size: 0.9rem; }
+        .link-block input {
+            padding: 0.5rem 0.8rem;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.04);
+            color: #fff;
+            font-size: 0.8rem;
+            outline: none;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .link-block input:focus {
+            border-color: rgba(108,140,255,0.2);
+            background: rgba(255,255,255,0.06);
+        }
+        .link-block input::placeholder { color: rgba(255,255,255,0.12); }
 
         .btn {
             display: inline-flex;
@@ -499,6 +552,8 @@
             .bio-item .info { width: 100%; }
             .bio-item .actions { width: 100%; justify-content: flex-end; }
             .tabs .tab { font-size: 0.7rem; padding: 0.3rem 0.8rem; }
+            .link-block { grid-template-columns: 1fr; gap: 0.3rem; }
+            .warning-banner span { font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -507,6 +562,12 @@
     <div class="stars-bg" id="starsBg"></div>
 
     <div class="container">
+        <!-- ПРЕДУПРЕЖДЕНИЕ -->
+        <div class="warning-banner">
+            <i class="fas fa-triangle-exclamation"></i>
+            <span>⚠️ Сайт может быть нестабильным. Сохраняй свои био и ссылки!</span>
+        </div>
+
         <div class="card" id="mainCard">
             <!-- Контент через JS -->
         </div>
@@ -796,6 +857,17 @@
                         </select>
                     </div>
 
+                    <!-- СОЦСЕТИ -->
+                    <div style="margin-top:1rem; border-top:1px solid rgba(255,255,255,0.04); padding-top:1rem;">
+                        <div style="font-size:0.75rem; font-weight:600; color:rgba(255,255,255,0.3); margin-bottom:0.5rem;">🔗 Соцсети (заполни нужные)</div>
+                        <div class="link-block"><span class="platform-icon"><i class="fab fa-discord"></i> Discord</span><input type="url" id="link_discord" placeholder="https://discord.gg/..." /></div>
+                        <div class="link-block"><span class="platform-icon"><i class="fab fa-twitch"></i> Twitch</span><input type="url" id="link_twitch" placeholder="https://twitch.tv/..." /></div>
+                        <div class="link-block"><span class="platform-icon"><i class="fab fa-youtube"></i> YouTube</span><input type="url" id="link_youtube" placeholder="https://youtube.com/..." /></div>
+                        <div class="link-block"><span class="platform-icon"><i class="fab fa-telegram"></i> Telegram</span><input type="url" id="link_telegram" placeholder="https://t.me/..." /></div>
+                        <div class="link-block"><span class="platform-icon"><i class="fab fa-github"></i> GitHub</span><input type="url" id="link_github" placeholder="https://github.com/..." /></div>
+                        <div class="link-block"><span class="platform-icon"><i class="fab fa-vk"></i> VK</span><input type="url" id="link_vk" placeholder="https://vk.com/..." /></div>
+                    </div>
+
                     <div class="form-group">
                         <label>🖼️ Картинка 1 (превью)</label>
                         <div class="file-input-wrapper">
@@ -817,6 +889,19 @@
                         <i class="fas fa-rocket"></i> Создать био
                     </button>
                 </form>
+
+                <!-- РЕЗУЛЬТАТ С ССЫЛКОЙ -->
+                <div id="resultBox" style="display:none; margin-top:1.5rem; border-top:1px solid rgba(255,255,255,0.04); padding-top:1.5rem;">
+                    <div style="text-align:center; font-weight:700; color:#34d399; margin-bottom:0.5rem;">✅ Био создано!</div>
+                    <div class="share-link-box">
+                        <span style="color:rgba(255,255,255,0.3); font-size:0.8rem;">🔗 Твоя ссылка:</span>
+                        <span class="link" id="newBioLink">загрузка...</span>
+                        <button class="copy-btn" id="copyNewBioLink">📋 Копировать</button>
+                    </div>
+                    <button class="btn btn-outline" id="goToDashboardBtn" style="margin-top:0.6rem; padding:0.6rem;">
+                        <i class="fas fa-arrow-left"></i> В дашборд
+                    </button>
+                </div>
             `;
 
             // ---- АВАТАРКА ----
@@ -966,6 +1051,12 @@
                 } else { checkAndSave(); }
 
                 function saveBio() {
+                    const links = {};
+                    ['discord', 'twitch', 'youtube', 'telegram', 'github', 'vk'].forEach(key => {
+                        const val = document.getElementById(`link_${key}`).value.trim();
+                        if (val) links[key] = val;
+                    });
+
                     const data = {
                         username: username,
                         description: document.getElementById('newDescription').value.trim(),
@@ -981,16 +1072,41 @@
                         bgStyle: document.getElementById('bgStyle').value,
                         bgImage: bgImageData || null,
                         image1: image1Data || null,
-                        image2: image2Data || null
+                        image2: image2Data || null,
+                        links: links
                     };
 
                     profiles[username.toLowerCase()] = data;
                     saveProfiles(profiles);
 
+                    // Показываем ссылку
+                    const link = `${window.location.origin}?profile=${username}`;
+                    document.getElementById('newBioLink').textContent = link;
+                    document.getElementById('newBioLink').href = link;
+                    document.getElementById('resultBox').style.display = 'block';
+
                     showToast('✅ Био создано!');
                     sendTelegram(`📁 Новое био: ${username} (${currentUser})`);
-                    renderDashboard();
                 }
+            });
+
+            // ---- КОПИРОВАНИЕ ССЫЛКИ ----
+            document.getElementById('copyNewBioLink').addEventListener('click', function() {
+                const link = document.getElementById('newBioLink').textContent;
+                navigator.clipboard.writeText(link).then(() => {
+                    showToast('📋 Ссылка скопирована!');
+                }).catch(() => {
+                    const range = document.createRange();
+                    range.selectNode(document.getElementById('newBioLink'));
+                    window.getSelection().removeAllRanges();
+                    window.getSelection().addRange(range);
+                    document.execCommand('copy');
+                    showToast('📋 Ссылка скопирована!');
+                });
+            });
+
+            document.getElementById('goToDashboardBtn').addEventListener('click', function() {
+                renderDashboard();
             });
 
             document.getElementById('backToDashboard').addEventListener('click', function() {
@@ -1041,6 +1157,33 @@
             if (data.image1) imagesHTML += `<div class="bio-image"><img src="${data.image1}" /></div>`;
             if (data.image2) imagesHTML += `<div class="bio-image"><img src="${data.image2}" /></div>`;
 
+            // Соцсети
+            let socialHTML = '';
+            const socialIcons = {
+                discord: 'fab fa-discord',
+                twitch: 'fab fa-twitch',
+                youtube: 'fab fa-youtube',
+                telegram: 'fab fa-telegram',
+                github: 'fab fa-github',
+                vk: 'fab fa-vk'
+            };
+            const socialLabels = {
+                discord: 'Discord',
+                twitch: 'Twitch',
+                youtube: 'YouTube',
+                telegram: 'Telegram',
+                github: 'GitHub',
+                vk: 'VK'
+            };
+            if (data.links) {
+                for (const [key, val] of Object.entries(data.links)) {
+                    if (val && val.trim()) {
+                        socialHTML +=
+                            `<a href="${val}" target="_blank" class="social-btn"><i class="${socialIcons[key] || 'fas fa-link'}"></i> ${socialLabels[key] || key}</a>`;
+                    }
+                }
+            }
+
             document.body.innerHTML = `
                 <style>
                     .bio-page {
@@ -1076,6 +1219,9 @@
                     .bio-page .images { display:flex; gap:0.8rem; flex-wrap:wrap; justify-content:center; margin:1rem 0; }
                     .bio-page .bio-image { max-width:200px; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,0.04); }
                     .bio-page .bio-image img { width:100%; height:auto; display:block; }
+                    .bio-page .socials { display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; margin:1rem 0; }
+                    .bio-page .social-btn { padding:0.4rem 1rem; border-radius:40px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.04); color:rgba(255,255,255,0.5); text-decoration:none; font-size:0.75rem; transition:0.3s; display:inline-flex; align-items:center; gap:6px; }
+                    .bio-page .social-btn:hover { background:rgba(255,255,255,0.08); color:#fff; }
                     .bio-page .footer { font-size:0.65rem; color:rgba(255,255,255,0.15); margin-top:1rem; display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; }
                     .bio-page .footer span { color:rgba(255,255,255,0.1); }
                     .bio-page .back-btn { display:inline-block; margin-top:0.8rem; padding:0.4rem 1.2rem; border-radius:40px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.04); color:rgba(255,255,255,0.3); text-decoration:none; font-size:0.7rem; transition:0.3s; }
@@ -1087,6 +1233,7 @@
                     <div class="name">${data.username}</div>
                     <div class="role">${data.role || 'Flipple Arcade'}</div>
                     ${data.description ? `<div class="desc">${data.description}</div>` : ''}
+                    ${socialHTML ? `<div class="socials">${socialHTML}</div>` : ''}
                     ${imagesHTML ? `<div class="images">${imagesHTML}</div>` : ''}
                     <div class="footer">
                         <span>👁️ ${data.views || 0} просмотров</span>
