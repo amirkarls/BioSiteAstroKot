@@ -102,6 +102,64 @@
         }
         .form-group textarea { resize: vertical; min-height: 60px; }
 
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .file-input-wrapper .fake-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0.7rem 1rem;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.4);
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .file-input-wrapper .fake-btn:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        .file-preview {
+            margin-top: 0.3rem;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .file-preview .preview-thumb {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .file-preview .preview-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .file-preview .preview-thumb .placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.1);
+            font-size: 1.5rem;
+        }
+
         .btn {
             display: inline-flex;
             align-items: center;
@@ -382,6 +440,36 @@
         }
         .modal-box .modal-actions .btn { width: 50%; padding: 0.6rem; font-size: 0.85rem; }
 
+        .share-link-box {
+            margin-top: 1rem;
+            padding: 0.8rem 1rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .share-link-box .link {
+            color: #6c8cff;
+            font-size: 0.8rem;
+            word-break: break-all;
+            flex: 1;
+        }
+        .share-link-box .copy-btn {
+            background: rgba(255,255,255,0.05);
+            border: none;
+            color: rgba(255,255,255,0.4);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: 0.3s;
+        }
+        .share-link-box .copy-btn:hover { background: rgba(255,255,255,0.08); }
+
         @media (max-width: 480px) {
             .card { padding: 1.5rem 1.2rem; border-radius: 24px; }
             h1 { font-size: 1.4rem; }
@@ -514,6 +602,16 @@
             localStorage.setItem('astroBioProfiles', JSON.stringify(profiles));
         }
 
+        function getUserBio(username) {
+            const profiles = getProfiles();
+            for (const key in profiles) {
+                if (profiles[key].owner === username) {
+                    return profiles[key];
+                }
+            }
+            return null;
+        }
+
         function deleteBio(username) {
             const profiles = getProfiles();
             delete profiles[username.toLowerCase()];
@@ -562,13 +660,23 @@
             if (e.target === this) hideConfirmModal();
         });
 
-        // ---- ФОРМА СОЗДАНИЯ БИО (без статуса) ----
+        // ---- ФОРМА СОЗДАНИЯ БИО ----
         function renderCreateBioForm() {
+            const currentUser = getCurrentUser();
+            const existingBio = getUserBio(currentUser);
+
+            // Проверяем лимит — 1 био на аккаунт
+            if (existingBio) {
+                showToast('❌ У тебя уже есть био! Можно создать только одно.', true);
+                renderDashboard();
+                return;
+            }
+
             document.getElementById('mainCard').innerHTML = `
                 <div class="profile-header">
                     <div>
                         <h2>✨ Создать новое био</h2>
-                        <div class="user-badge">${isOwner() ? '👑 Владелец' : '👤 ' + getCurrentUser()}</div>
+                        <div class="user-badge">${isOwner() ? '👑 Владелец' : '👤 ' + currentUser}</div>
                     </div>
                     <button class="logout-btn" id="backToDashboard"><i class="fas fa-arrow-left"></i> Назад</button>
                 </div>
@@ -596,11 +704,51 @@
                             <option value="#f472b6">🌸 Розовый</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label>🖼️ Картинка 1 (превью)</label>
+                        <div class="file-input-wrapper">
+                            <div class="fake-btn"><i class="fas fa-image"></i> Загрузить картинку 1</div>
+                            <input type="file" id="newImage1" accept="image/*" />
+                        </div>
+                        <div class="file-preview" id="preview1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>🖼️ Картинка 2 (дополнительная)</label>
+                        <div class="file-input-wrapper">
+                            <div class="fake-btn"><i class="fas fa-image"></i> Загрузить картинку 2</div>
+                            <input type="file" id="newImage2" accept="image/*" />
+                        </div>
+                        <div class="file-preview" id="preview2"></div>
+                    </div>
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-rocket"></i> Создать био
                     </button>
                 </form>
             `;
+
+            // Предпросмотр картинок
+            document.getElementById('newImage1').addEventListener('change', function(e) {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        document.getElementById('preview1').innerHTML =
+                            `<div class="preview-thumb"><img src="${ev.target.result}" /></div>`;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            document.getElementById('newImage2').addEventListener('change', function(e) {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        document.getElementById('preview2').innerHTML =
+                            `<div class="preview-thumb"><img src="${ev.target.result}" /></div>`;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
 
             // Обработка формы
             document.getElementById('createBioForm').addEventListener('submit', function(e) {
@@ -617,29 +765,159 @@
                     return;
                 }
 
-                const data = {
-                    username: username,
-                    description: document.getElementById('newDescription').value.trim(),
-                    role: document.getElementById('newRole').value.trim() || 'Flipple Arcade',
-                    textColor: document.getElementById('newTextColor').value,
-                    owner: getCurrentUser(),
-                    views: 0,
-                    createdAt: new Date().toISOString(),
-                    avatarType: 'emoji',
-                    avatarEmoji: '🐱'
-                };
+                // Проверяем лимит ещё раз
+                if (getUserBio(currentUser)) {
+                    showToast('❌ У тебя уже есть био! Можно создать только одно.', true);
+                    renderDashboard();
+                    return;
+                }
 
-                profiles[username.toLowerCase()] = data;
-                saveProfiles(profiles);
+                const image1File = document.getElementById('newImage1').files[0];
+                const image2File = document.getElementById('newImage2').files[0];
+                const reader1 = new FileReader();
+                const reader2 = new FileReader();
+                let image1Data = null;
+                let image2Data = null;
+                let loaded = 0;
 
-                showToast('✅ Био создано!');
-                sendTelegram(`📁 Новое био: ${username} (${getCurrentUser()})`);
-                renderDashboard();
+                function checkAndSave() {
+                    loaded++;
+                    if (loaded === 2) {
+                        saveBio(username, image1Data, image2Data);
+                    }
+                }
+
+                if (image1File) {
+                    reader1.onload = function(ev) { image1Data = ev.target.result;
+                        checkAndSave(); };
+                    reader1.readAsDataURL(image1File);
+                } else {
+                    checkAndSave();
+                }
+
+                if (image2File) {
+                    reader2.onload = function(ev) { image2Data = ev.target.result;
+                        checkAndSave(); };
+                    reader2.readAsDataURL(image2File);
+                } else {
+                    checkAndSave();
+                }
+
+                function saveBio(username, img1, img2) {
+                    const data = {
+                        username: username,
+                        description: document.getElementById('newDescription').value.trim(),
+                        role: document.getElementById('newRole').value.trim() || 'Flipple Arcade',
+                        textColor: document.getElementById('newTextColor').value,
+                        owner: currentUser,
+                        views: 0,
+                        createdAt: new Date().toISOString(),
+                        avatarType: 'emoji',
+                        avatarEmoji: '🐱',
+                        image1: img1 || null,
+                        image2: img2 || null
+                    };
+
+                    profiles[username.toLowerCase()] = data;
+                    saveProfiles(profiles);
+
+                    showToast('✅ Био создано!');
+                    sendTelegram(`📁 Новое био: ${username} (${currentUser})`);
+                    renderDashboard();
+                }
             });
 
             document.getElementById('backToDashboard').addEventListener('click', function() {
                 renderDashboard();
             });
+        }
+
+        // ---- ОТОБРАЖЕНИЕ БИО (отдельная страница) ----
+        function renderBioPage(username) {
+            const profiles = getProfiles();
+            const data = profiles[username.toLowerCase()];
+            if (!data) {
+                document.body.innerHTML = `
+                    <div style="text-align:center;padding:2rem;">
+                        <div style="font-size:4rem;margin-bottom:1rem;">🚀</div>
+                        <h1 style="font-size:2rem;color:#ff6b6b;">404</h1>
+                        <p style="color:rgba(255,255,255,0.5);">Био не найдено</p>
+                        <a href="/" style="display:inline-block;margin-top:1rem;padding:0.6rem 1.5rem;border-radius:40px;background:linear-gradient(135deg,#4f7aff,#8b5cf6);color:#fff;text-decoration:none;">На главную</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Увеличиваем просмотры
+            data.views = (data.views || 0) + 1;
+            profiles[username.toLowerCase()] = data;
+            saveProfiles(profiles);
+
+            const avatar = data.avatarType === 'emoji' ?
+                data.avatarEmoji || '🐱' :
+                (data.avatarData ? `<img src="${data.avatarData}" />` : '🐱');
+
+            let imagesHTML = '';
+            if (data.image1) {
+                imagesHTML += `<div class="bio-image"><img src="${data.image1}" /></div>`;
+            }
+            if (data.image2) {
+                imagesHTML += `<div class="bio-image"><img src="${data.image2}" /></div>`;
+            }
+
+            document.body.innerHTML = `
+                <style>
+                    .bio-page {
+                        max-width: 500px;
+                        width: 100%;
+                        margin: 0 auto;
+                        background: rgba(18,25,55,0.2);
+                        backdrop-filter: blur(20px);
+                        border: 1px solid rgba(255,255,255,0.04);
+                        border-radius: 40px;
+                        padding: 2rem 1.8rem;
+                        box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+                        text-align: center;
+                    }
+                    .bio-page .avatar {
+                        width: 90px;
+                        height: 90px;
+                        margin: 0 auto 0.8rem;
+                        background: linear-gradient(135deg,#6c8cff,#a855f7);
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 2.5rem;
+                        box-shadow: 0 8px 30px rgba(108,140,255,0.15);
+                        border: 2px solid rgba(255,255,255,0.06);
+                        overflow: hidden;
+                    }
+                    .bio-page .avatar img { width:100%; height:100%; object-fit:cover; }
+                    .bio-page .name { font-size:1.6rem; font-weight:800; color:${data.textColor || '#ffffff'}; }
+                    .bio-page .role { font-size:0.6rem; font-weight:600; color:rgba(255,255,255,0.3); letter-spacing:0.5px; text-transform:uppercase; margin-top:0.2rem; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.04); padding:0.2rem 1rem; border-radius:40px; display:inline-block; }
+                    .bio-page .desc { color:${data.textColor || '#ffffff'}; font-size:0.9rem; line-height:1.6; margin:1rem 0 1.2rem; padding:0.8rem 1rem; background:rgba(0,10,30,0.15); border-radius:12px; border-left:2px solid rgba(108,140,255,0.15); opacity:0.85; }
+                    .bio-page .images { display:flex; gap:0.8rem; flex-wrap:wrap; justify-content:center; margin:1rem 0; }
+                    .bio-page .bio-image { width:100%; max-width:200px; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,0.04); }
+                    .bio-page .bio-image img { width:100%; height:auto; display:block; }
+                    .bio-page .footer { font-size:0.65rem; color:rgba(255,255,255,0.15); margin-top:1rem; display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; }
+                    .bio-page .footer span { color:rgba(255,255,255,0.1); }
+                    .bio-page .back-btn { display:inline-block; margin-top:0.8rem; padding:0.4rem 1.2rem; border-radius:40px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.04); color:rgba(255,255,255,0.3); text-decoration:none; font-size:0.7rem; transition:0.3s; }
+                    .bio-page .back-btn:hover { background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.5); }
+                </style>
+                <div class="bio-page">
+                    <div class="avatar">${avatar}</div>
+                    <div class="name">${data.username}</div>
+                    <div class="role">${data.role || 'Flipple Arcade'}</div>
+                    ${data.description ? `<div class="desc">${data.description}</div>` : ''}
+                    ${imagesHTML ? `<div class="images">${imagesHTML}</div>` : ''}
+                    <div class="footer">
+                        <span>👁️ ${data.views || 0} просмотров</span>
+                        <span>📅 ${new Date(data.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <a href="/" class="back-btn"><i class="fas fa-arrow-left"></i> На главную</a>
+                </div>
+            `;
         }
 
         // ---- РЕНДЕР СТРАНИЦ ----
@@ -860,7 +1138,12 @@
         }
 
         // ---- ЗАПУСК ----
-        if (isLoggedIn()) {
+        const params = new URLSearchParams(window.location.search);
+        const profileName = params.get('profile');
+
+        if (profileName) {
+            renderBioPage(profileName);
+        } else if (isLoggedIn()) {
             renderDashboard();
         } else {
             renderLogin();
